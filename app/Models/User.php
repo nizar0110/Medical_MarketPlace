@@ -21,6 +21,7 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
+        'role',
     ];
 
     /**
@@ -44,5 +45,21 @@ class User extends Authenticatable
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
         ];
+    }
+
+    /**
+     * Un vendeur a plusieurs produits
+     */
+    public function products()
+    {
+        return $this->hasMany(Product::class, 'seller_id');
+    }
+
+    /**
+     * Un client a plusieurs commandes
+     */
+    public function orders()
+    {
+        return $this->hasMany(Order::class, 'client_id');
     }
 }
