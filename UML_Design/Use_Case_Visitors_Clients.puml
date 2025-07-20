@@ -1,0 +1,97 @@
+@startuml Use_Case_Visitors_Clients
+
+left to right direction
+skinparam packageStyle rectangle
+
+actor "Visiteur" as Visitor
+actor "Client" as Customer
+
+rectangle "Medical MarketPlace - Visiteurs et Clients" {
+    
+    ' Cas d'usage pour Visiteur
+    usecase "Consulter les produits" as UC1
+    usecase "Rechercher des produits" as UC2
+    usecase "Voir les détails d'un produit" as UC3
+    usecase "S'inscrire" as UC4
+    usecase "Se connecter" as UC5
+    usecase "Consulter les avis" as UC6
+    usecase "Comparer les produits" as UC7
+    
+    ' Cas d'usage pour Client
+    usecase "Gérer le profil" as UC8
+    usecase "Ajouter au panier" as UC9
+    usecase "Gérer le panier" as UC10
+    usecase "Passer une commande" as UC11
+    usecase "Suivre les commandes" as UC12
+    usecase "Laisser un avis" as UC13
+    usecase "Ajouter aux favoris" as UC14
+    usecase "Gérer les adresses" as UC15
+    usecase "Consulter l'historique" as UC16
+    usecase "Demander un retour" as UC17
+    usecase "Contacter le support" as UC18
+    usecase "Changer mot de passe" as UC19
+    usecase "Voir les promotions" as UC20
+}
+
+' Relations Visiteur
+Visitor --> UC1
+Visitor --> UC2
+Visitor --> UC3
+Visitor --> UC4
+Visitor --> UC5
+Visitor --> UC6
+Visitor --> UC7
+
+' Relations Client
+Customer --> UC1
+Customer --> UC2
+Customer --> UC3
+Customer --> UC8
+Customer --> UC9
+Customer --> UC10
+Customer --> UC11
+Customer --> UC12
+Customer --> UC13
+Customer --> UC14
+Customer --> UC15
+Customer --> UC16
+Customer --> UC17
+Customer --> UC18
+Customer --> UC19
+Customer --> UC20
+
+' Include relationships
+UC3 ..> UC1 : <<include>>
+UC11 ..> UC9 : <<include>>
+UC11 ..> UC10 : <<include>>
+UC12 ..> UC11 : <<include>>
+UC13 ..> UC3 : <<include>>
+UC14 ..> UC3 : <<include>>
+
+' Extend relationships
+UC2 ..> UC1 : <<extend>>
+UC7 ..> UC3 : <<extend>>
+UC10 ..> UC9 : <<extend>>
+
+note right of UC1 : Catalogue de produits
+note right of UC2 : Recherche par nom, marque, catégorie
+note right of UC3 : Fiche détaillée avec photos et avis
+note right of UC4 : Inscription avec validation email
+note right of UC5 : Connexion avec email/mot de passe
+note right of UC6 : Consultation des avis clients
+note right of UC7 : Comparaison de produits
+note right of UC8 : Modification des informations personnelles
+note right of UC9 : Ajout de produits au panier
+note right of UC10 : Modification/suppression d'articles
+note right of UC11 : Processus complet d'achat
+note right of UC12 : Suivi des commandes en temps réel
+note right of UC13 : Notation et commentaires
+note right of UC14 : Liste de souhaits
+note right of UC15 : Gestion des adresses de livraison
+note right of UC16 : Historique des commandes
+note right of UC17 : Demande de retour/remboursement
+note right of UC18 : Contact support client
+note right of UC19 : Changement de mot de passe
+note right of UC20 : Consultation des promotions
+
+@enduml 

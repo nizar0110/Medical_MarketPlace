@@ -1,0 +1,30 @@
+@startuml Use_Case_Order
+
+left to right direction
+skinparam packageStyle rectangle
+
+actor "Client" as Customer
+actor "Système de Paiement" as Payment
+
+rectangle "Processus de Commande" {
+    usecase "Passer commande" as PlaceOrder
+    usecase "Saisir adresse" as EnterAddress
+    usecase "Choisir livraison" as ChooseShipping
+    usecase "Payer" as Pay
+    usecase "Confirmer commande" as ConfirmOrder
+}
+
+Customer --> PlaceOrder
+PlaceOrder --> EnterAddress
+PlaceOrder --> ChooseShipping
+PlaceOrder --> Pay
+Pay --> Payment
+Payment --> ConfirmOrder
+
+note right of PlaceOrder : Depuis le panier
+note right of EnterAddress : Adresse de livraison
+note right of ChooseShipping : Mode de livraison
+note right of Pay : Carte, PayPal, virement
+note right of ConfirmOrder : Email de confirmation
+
+@enduml 

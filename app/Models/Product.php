@@ -7,6 +7,19 @@ use Illuminate\Database\Eloquent\Model;
 class Product extends Model
 {
     /**
+     * Les attributs qui peuvent être assignés en masse.
+     */
+    protected $fillable = [
+        'name',
+        'description',
+        'price',
+        'category_id',
+        'stock',
+        'image',
+        'seller_id'
+    ];
+
+    /**
      * Le produit appartient à une catégorie
      */
     public function category()

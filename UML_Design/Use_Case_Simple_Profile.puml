@@ -1,0 +1,28 @@
+@startuml Use_Case_Profile
+
+left to right direction
+skinparam packageStyle rectangle
+
+actor "Client" as Customer
+
+rectangle "Gestion du Profil" {
+    usecase "Modifier profil" as EditProfile
+    usecase "Changer mot de passe" as ChangePassword
+    usecase "Ajouter adresse" as AddAddress
+    usecase "Voir commandes" as ViewOrders
+    usecase "Gérer favoris" as ManageWishlist
+}
+
+Customer --> EditProfile
+Customer --> ChangePassword
+Customer --> AddAddress
+Customer --> ViewOrders
+Customer --> ManageWishlist
+
+note right of EditProfile : Nom, email, téléphone
+note right of ChangePassword : Ancien + nouveau mot de passe
+note right of AddAddress : Adresse de livraison
+note right of ViewOrders : Historique des commandes
+note right of ManageWishlist : Produits favoris
+
+@enduml 

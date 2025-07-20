@@ -1,0 +1,32 @@
+@startuml Use_Case_Notification
+
+left to right direction
+skinparam packageStyle rectangle
+
+actor "Système" as System
+actor "Client" as Customer
+
+rectangle "Système de Notifications" {
+    usecase "Envoyer email" as SendEmail
+    usecase "Envoyer SMS" as SendSMS
+    usecase "Notification push" as PushNotification
+    usecase "Confirmation commande" as OrderConfirmation
+    usecase "Suivi livraison" as ShippingUpdate
+}
+
+System --> SendEmail
+System --> SendSMS
+System --> PushNotification
+System --> OrderConfirmation
+System --> ShippingUpdate
+
+Customer --> OrderConfirmation
+Customer --> ShippingUpdate
+
+note right of SendEmail : Notifications importantes
+note right of SendSMS : Alertes urgentes
+note right of PushNotification : Application mobile
+note right of OrderConfirmation : Détails commande
+note right of ShippingUpdate : Statut livraison
+
+@enduml 

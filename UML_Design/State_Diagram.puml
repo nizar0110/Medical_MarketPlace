@@ -1,0 +1,69 @@
+@startuml Medical_MarketPlace_State_Diagram
+
+[*] --> Draft
+
+state Draft {
+    [*] --> CartCreated
+    CartCreated --> ItemsAdded : Add items
+    ItemsAdded --> CartUpdated : Update quantities
+    CartUpdated --> CartValidated : Validate cart
+    CartValidated --> ReadyForCheckout : Proceed to checkout
+}
+
+state ReadyForCheckout {
+    [*] --> UserAuthentication
+    UserAuthentication --> ShippingInfo : User logged in
+    ShippingInfo --> PaymentMethod : Address entered
+    PaymentMethod --> PaymentProcessing : Payment selected
+}
+
+state PaymentProcessing {
+    [*] --> PaymentValidation
+    PaymentValidation --> PaymentApproved : Payment successful
+    PaymentValidation --> PaymentFailed : Payment failed
+    PaymentFailed --> PaymentMethod : Retry payment
+}
+
+state OrderManagement {
+    [*] --> OrderCreated : Payment approved
+    OrderCreated --> OrderConfirmed : Order confirmed
+    OrderConfirmed --> OrderProcessing : Processing started
+    OrderProcessing --> OrderShipped : Items shipped
+    OrderShipped --> OrderDelivered : Delivery completed
+    OrderDelivered --> OrderCompleted : Order completed
+}
+
+state OrderCancellation {
+    [*] --> CancellationRequested : User requests cancellation
+    CancellationRequested --> CancellationApproved : Admin approves
+    CancellationApproved --> RefundProcessing : Refund initiated
+    RefundProcessing --> OrderCancelled : Refund completed
+}
+
+state OrderReturn {
+    [*] --> ReturnRequested : User requests return
+    ReturnRequested --> ReturnApproved : Admin approves
+    ReturnApproved --> ReturnProcessing : Return processing
+    ReturnProcessing --> ReturnCompleted : Return completed
+}
+
+Draft --> ReadyForCheckout : Cart ready
+ReadyForCheckout --> PaymentProcessing : Checkout completed
+PaymentProcessing --> OrderManagement : Payment successful
+PaymentProcessing --> Draft : Payment failed
+
+OrderManagement --> OrderCancellation : Cancellation requested
+OrderManagement --> OrderReturn : Return requested
+
+OrderCancelled --> [*]
+OrderCompleted --> [*]
+ReturnCompleted --> [*]
+
+note right of Draft : Cart management phase
+note right of ReadyForCheckout : Checkout process
+note right of PaymentProcessing : Payment handling
+note right of OrderManagement : Order fulfillment
+note right of OrderCancellation : Cancellation handling
+note right of OrderReturn : Return handling
+
+@enduml 

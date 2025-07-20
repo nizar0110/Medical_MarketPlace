@@ -1,0 +1,28 @@
+@startuml Use_Case_Admin
+
+left to right direction
+skinparam packageStyle rectangle
+
+actor "Administrateur" as Admin
+
+rectangle "Interface d'Administration" {
+    usecase "Gérer commandes" as ManageOrders
+    usecase "Gérer utilisateurs" as ManageUsers
+    usecase "Voir statistiques" as ViewStats
+    usecase "Générer rapports" as GenerateReports
+    usecase "Configurer système" as ConfigureSystem
+}
+
+Admin --> ManageOrders
+Admin --> ManageUsers
+Admin --> ViewStats
+Admin --> GenerateReports
+Admin --> ConfigureSystem
+
+note right of ManageOrders : Statuts, livraisons
+note right of ManageUsers : Clients, permissions
+note right of ViewStats : Ventes, visites
+note right of GenerateReports : PDF, Excel
+note right of ConfigureSystem : Paramètres site
+
+@enduml 

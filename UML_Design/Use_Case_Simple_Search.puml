@@ -1,0 +1,25 @@
+@startuml Use_Case_Search
+
+left to right direction
+skinparam packageStyle rectangle
+
+actor "Utilisateur" as User
+
+rectangle "Système de Recherche" {
+    usecase "Rechercher produits" as Search
+    usecase "Filtrer résultats" as Filter
+    usecase "Trier résultats" as Sort
+    usecase "Voir suggestions" as Suggestions
+}
+
+User --> Search
+Search ..> Filter : <<extend>>
+Search ..> Sort : <<extend>>
+Search ..> Suggestions : <<extend>>
+
+note right of Search : Terme de recherche
+note right of Filter : Prix, marque, catégorie
+note right of Sort : Prix, popularité, nouveauté
+note right of Suggestions : Recherches populaires
+
+@enduml 

@@ -1,0 +1,48 @@
+@startuml Simple Class Diagram
+!theme plain
+skinparam backgroundColor white
+
+class User {
+    +id: int
+    +name: string
+    +email: string
+    +password: string
+    +role: string
+    +created_at: datetime
+    +updated_at: datetime
+}
+
+class Product {
+    +id: int
+    +name: string
+    +description: text
+    +price: decimal
+    +stock: int
+    +category: string
+    +image: string
+    +created_at: datetime
+    +updated_at: datetime
+}
+
+class Order {
+    +id: int
+    +user_id: int
+    +total: decimal
+    +status: string
+    +created_at: datetime
+    +updated_at: datetime
+}
+
+class OrderItem {
+    +id: int
+    +order_id: int
+    +product_id: int
+    +quantity: int
+    +price: decimal
+}
+
+User ||--o{ Order : "passe"
+Order ||--o{ OrderItem : "contient"
+Product ||--o{ OrderItem : "inclus dans"
+
+@enduml 

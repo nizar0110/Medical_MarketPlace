@@ -1,0 +1,29 @@
+@startuml Use_Case_Payment
+
+left to right direction
+skinparam packageStyle rectangle
+
+actor "Client" as Customer
+actor "Système de Paiement" as PaymentSystem
+
+rectangle "Système de Paiement" {
+    usecase "Choisir paiement" as ChoosePayment
+    usecase "Saisir carte" as EnterCard
+    usecase "Valider paiement" as ValidatePayment
+    usecase "Recevoir confirmation" as ReceiveConfirmation
+    usecase "Générer facture" as GenerateInvoice
+}
+
+Customer --> ChoosePayment
+Customer --> EnterCard
+PaymentSystem --> ValidatePayment
+PaymentSystem --> ReceiveConfirmation
+ValidatePayment --> GenerateInvoice
+
+note right of ChoosePayment : Carte, PayPal, Virement
+note right of EnterCard : Numéro, date, CVV
+note right of ValidatePayment : Vérification sécurité
+note right of ReceiveConfirmation : Email de confirmation
+note right of GenerateInvoice : Facture PDF
+
+@enduml 

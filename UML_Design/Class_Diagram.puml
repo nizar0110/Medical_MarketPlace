@@ -1,0 +1,235 @@
+@startuml Medical_MarketPlace_Class_Diagram
+
+!define RECTANGLE class
+
+package "Models" {
+    class User {
+        +id: int
+        +name: string
+        +email: string
+        +email_verified_at: datetime
+        +password: string
+        +remember_token: string
+        +created_at: timestamp
+        +updated_at: timestamp
+        --
+        +orders(): hasMany
+        +reviews(): hasMany
+        +wishlist(): hasMany
+        +cart(): hasOne
+    }
+
+    class Product {
+        +id: int
+        +name: string
+        +description: text
+        +price: decimal
+        +stock_quantity: int
+        +category_id: int
+        +brand: string
+        +model: string
+        +certification: string
+        +image_url: string
+        +is_active: boolean
+        +created_at: timestamp
+        +updated_at: timestamp
+        --
+        +category(): belongsTo
+        +orderItems(): hasMany
+        +reviews(): hasMany
+        +wishlistItems(): hasMany
+        +cartItems(): hasMany
+    }
+
+    class Category {
+        +id: int
+        +name: string
+        +description: text
+        +parent_id: int
+        +image_url: string
+        +is_active: boolean
+        +created_at: timestamp
+        +updated_at: timestamp
+        --
+        +products(): hasMany
+        +parent(): belongsTo
+        +children(): hasMany
+    }
+
+    class Order {
+        +id: int
+        +user_id: int
+        +order_number: string
+        +total_amount: decimal
+        +status: enum
+        +payment_method: string
+        +shipping_address: text
+        +billing_address: text
+        +notes: text
+        +created_at: timestamp
+        +updated_at: timestamp
+        --
+        +user(): belongsTo
+        +orderItems(): hasMany
+        +payment(): hasOne
+    }
+
+    class OrderItem {
+        +id: int
+        +order_id: int
+        +product_id: int
+        +quantity: int
+        +unit_price: decimal
+        +total_price: decimal
+        +created_at: timestamp
+        +updated_at: timestamp
+        --
+        +order(): belongsTo
+        +product(): belongsTo
+    }
+
+    class Cart {
+        +id: int
+        +user_id: int
+        +created_at: timestamp
+        +updated_at: timestamp
+        --
+        +user(): belongsTo
+        +cartItems(): hasMany
+    }
+
+    class CartItem {
+        +id: int
+        +cart_id: int
+        +product_id: int
+        +quantity: int
+        +created_at: timestamp
+        +updated_at: timestamp
+        --
+        +cart(): belongsTo
+        +product(): belongsTo
+    }
+
+    class Review {
+        +id: int
+        +user_id: int
+        +product_id: int
+        +rating: int
+        +comment: text
+        +is_verified: boolean
+        +created_at: timestamp
+        +updated_at: timestamp
+        --
+        +user(): belongsTo
+        +product(): belongsTo
+    }
+
+    class Wishlist {
+        +id: int
+        +user_id: int
+        +product_id: int
+        +created_at: timestamp
+        +updated_at: timestamp
+        --
+        +user(): belongsTo
+        +product(): belongsTo
+    }
+
+    class Payment {
+        +id: int
+        +order_id: int
+        +amount: decimal
+        +payment_method: string
+        +transaction_id: string
+        +status: enum
+        +created_at: timestamp
+        +updated_at: timestamp
+        --
+        +order(): belongsTo
+    }
+}
+
+package "Controllers" {
+    class ProductController {
+        +index(): view
+        +show(id): view
+        +create(): view
+        +store(request): redirect
+        +edit(id): view
+        +update(request, id): redirect
+        +destroy(id): redirect
+    }
+
+    class OrderController {
+        +index(): view
+        +show(id): view
+        +store(request): redirect
+        +update(request, id): redirect
+    }
+
+    class CartController {
+        +index(): view
+        +add(request): redirect
+        +update(request, id): redirect
+        +remove(id): redirect
+        +clear(): redirect
+    }
+
+    class UserController {
+        +profile(): view
+        +updateProfile(request): redirect
+        +orders(): view
+        +wishlist(): view
+    }
+
+    class AuthController {
+        +login(): view
+        +authenticate(request): redirect
+        +register(): view
+        +store(request): redirect
+        +logout(): redirect
+    }
+}
+
+package "Services" {
+    class PaymentService {
+        +processPayment(order, paymentData): bool
+        +validatePayment(paymentData): bool
+        +generateInvoice(order): string
+    }
+
+    class NotificationService {
+        +sendOrderConfirmation(order): void
+        +sendPaymentConfirmation(payment): void
+        +sendShippingUpdate(order): void
+    }
+
+    class SearchService {
+        +searchProducts(query, filters): Collection
+        +getRelatedProducts(product): Collection
+        +getPopularProducts(): Collection
+    }
+}
+
+' Relations
+User ||--o{ Order : places
+User ||--o{ Review : writes
+User ||--o{ Wishlist : has
+User ||--|| Cart : has
+
+Product ||--o{ OrderItem : contains
+Product ||--o{ Review : receives
+Product ||--o{ Wishlist : in
+Product ||--o{ CartItem : in
+Product }o--|| Category : belongs_to
+
+Category ||--o{ Product : contains
+Category }o--|| Category : parent_of
+
+Order ||--o{ OrderItem : contains
+Order ||--|| Payment : has
+Order }o--|| User : placed_by
+
+Cart ||--o{ CartItem : contains
+
+@enduml 

@@ -1,0 +1,98 @@
+@startuml Medical_MarketPlace_Sequence_Diagram
+
+actor "Client" as Customer
+participant "Interface Web" as UI
+participant "ProductController" as PC
+participant "CartController" as CC
+participant "OrderController" as OC
+participant "PaymentService" as PS
+participant "NotificationService" as NS
+participant "Database" as DB
+
+== Recherche et sélection de produits ==
+Customer -> UI: Consulter les produits
+UI -> PC: index()
+PC -> DB: getProducts()
+DB --> PC: Liste des produits
+PC --> UI: Vue des produits
+UI --> Customer: Affichage des produits
+
+Customer -> UI: Rechercher un produit
+UI -> PC: search(query)
+PC -> DB: searchProducts(query)
+DB --> PC: Résultats de recherche
+PC --> UI: Produits filtrés
+UI --> Customer: Résultats affichés
+
+Customer -> UI: Voir détails produit
+UI -> PC: show(productId)
+PC -> DB: getProduct(productId)
+DB --> PC: Détails du produit
+PC --> UI: Vue détaillée
+UI --> Customer: Détails affichés
+
+== Ajout au panier ==
+Customer -> UI: Ajouter au panier
+UI -> CC: add(productId, quantity)
+CC -> DB: getOrCreateCart(userId)
+DB --> CC: Cart
+CC -> DB: addCartItem(cartId, productId, quantity)
+DB --> CC: CartItem créé
+CC --> UI: Confirmation
+UI --> Customer: Produit ajouté
+
+== Gestion du panier ==
+Customer -> UI: Voir le panier
+UI -> CC: index()
+CC -> DB: getCartItems(userId)
+DB --> CC: Items du panier
+CC --> UI: Vue du panier
+UI --> Customer: Panier affiché
+
+Customer -> UI: Modifier quantité
+UI -> CC: update(itemId, quantity)
+CC -> DB: updateCartItem(itemId, quantity)
+DB --> CC: Item mis à jour
+CC --> UI: Panier mis à jour
+UI --> Customer: Quantité modifiée
+
+== Processus de commande ==
+Customer -> UI: Passer la commande
+UI -> OC: create()
+OC -> DB: getCartItems(userId)
+DB --> OC: Items du panier
+OC --> UI: Formulaire de commande
+UI --> Customer: Formulaire affiché
+
+Customer -> UI: Confirmer la commande
+UI -> OC: store(orderData)
+OC -> DB: createOrder(orderData)
+DB --> OC: Order créée
+OC -> DB: createOrderItems(orderId, items)
+DB --> OC: OrderItems créés
+OC -> PS: processPayment(order, paymentData)
+PS -> DB: createPayment(paymentData)
+DB --> PS: Payment créé
+PS --> OC: Paiement traité
+OC -> NS: sendOrderConfirmation(order)
+NS -> DB: logNotification(notification)
+DB --> NS: Notification enregistrée
+OC --> UI: Confirmation de commande
+UI --> Customer: Commande confirmée
+
+== Suivi de commande ==
+Customer -> UI: Voir mes commandes
+UI -> OC: index()
+OC -> DB: getUserOrders(userId)
+DB --> OC: Liste des commandes
+OC --> UI: Vue des commandes
+UI --> Customer: Commandes affichées
+
+Customer -> UI: Voir détails commande
+UI -> OC: show(orderId)
+OC -> DB: getOrder(orderId)
+DB --> OC: Détails de la commande
+OC --> UI: Vue détaillée
+UI --> Customer: Détails affichés
+
+@enduml 

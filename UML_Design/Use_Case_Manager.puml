@@ -1,0 +1,120 @@
+@startuml Use_Case_Manager
+
+left to right direction
+skinparam packageStyle rectangle
+
+actor "Gestionnaire" as Manager
+
+rectangle "Medical MarketPlace - Gestion Opérationnelle" {
+    
+    ' Gestion des commandes
+    usecase "Traiter les commandes en attente" as UC1
+    usecase "Valider les commandes" as UC2
+    usecase "Préparer les commandes" as UC3
+    usecase "Expédier les commandes" as UC4
+    usecase "Suivre les livraisons" as UC5
+    usecase "Gérer les commandes urgentes" as UC6
+    
+    ' Gestion des retours
+    usecase "Recevoir les demandes de retour" as UC7
+    usecase "Valider les retours" as UC8
+    usecase "Générer les étiquettes de retour" as UC9
+    usecase "Traiter les remboursements" as UC10
+    usecase "Confirmer les retours reçus" as UC11
+    
+    ' Gestion des stocks
+    usecase "Surveiller les niveaux de stock" as UC12
+    usecase "Gérer les alertes de rupture" as UC13
+    usecase "Commander des produits" as UC14
+    usecase "Réceptionner les livraisons" as UC15
+    usecase "Inventorier les stocks" as UC16
+    
+    ' Gestion des livraisons
+    usecase "Coordonner avec les transporteurs" as UC17
+    usecase "Suivre les colis" as UC18
+    usecase "Gérer les incidents de livraison" as UC19
+    usecase "Confirmer les livraisons" as UC20
+    
+    ' Rapports opérationnels
+    usecase "Générer des rapports de commandes" as UC21
+    usecase "Analyser les performances de livraison" as UC22
+    usecase "Suivre les retours" as UC23
+    usecase "Rapporter les incidents" as UC24
+}
+
+' Relations Gestionnaire
+Manager --> UC1
+Manager --> UC2
+Manager --> UC3
+Manager --> UC4
+Manager --> UC5
+Manager --> UC6
+Manager --> UC7
+Manager --> UC8
+Manager --> UC9
+Manager --> UC10
+Manager --> UC11
+Manager --> UC12
+Manager --> UC13
+Manager --> UC14
+Manager --> UC15
+Manager --> UC16
+Manager --> UC17
+Manager --> UC18
+Manager --> UC19
+Manager --> UC20
+Manager --> UC21
+Manager --> UC22
+Manager --> UC23
+Manager --> UC24
+
+' Include relationships
+UC2 ..> UC1 : <<include>>
+UC3 ..> UC2 : <<include>>
+UC4 ..> UC3 : <<include>>
+UC5 ..> UC4 : <<include>>
+UC8 ..> UC7 : <<include>>
+UC9 ..> UC8 : <<include>>
+UC10 ..> UC8 : <<include>>
+UC11 ..> UC10 : <<include>>
+UC13 ..> UC12 : <<include>>
+UC14 ..> UC13 : <<include>>
+UC15 ..> UC14 : <<include>>
+UC18 ..> UC17 : <<include>>
+UC19 ..> UC18 : <<include>>
+UC20 ..> UC19 : <<include>>
+UC21 ..> UC1 : <<include>>
+UC22 ..> UC5 : <<include>>
+UC23 ..> UC11 : <<include>>
+
+' Extend relationships
+UC6 ..> UC1 : <<extend>>
+UC16 ..> UC12 : <<extend>>
+UC24 ..> UC19 : <<extend>>
+
+note right of UC1 : Traitement des nouvelles commandes
+note right of UC2 : Validation des paiements et informations
+note right of UC3 : Préparation des colis
+note right of UC4 : Expédition avec numéro de suivi
+note right of UC5 : Suivi en temps réel des livraisons
+note right of UC6 : Traitement prioritaire des urgences
+note right of UC7 : Réception des demandes de retour
+note right of UC8 : Validation des conditions de retour
+note right of UC9 : Génération des étiquettes de retour
+note right of UC10 : Traitement des remboursements
+note right of UC11 : Confirmation de réception des retours
+note right of UC12 : Surveillance des niveaux de stock
+note right of UC13 : Alertes automatiques de rupture
+note right of UC14 : Commandes auprès des fournisseurs
+note right of UC15 : Réception et vérification des livraisons
+note right of UC16 : Inventaire physique des stocks
+note right of UC17 : Communication avec les transporteurs
+note right of UC18 : Suivi des colis en transit
+note right of UC19 : Gestion des incidents de livraison
+note right of UC20 : Confirmation de livraison réussie
+note right of UC21 : Rapports quotidiens de commandes
+note right of UC22 : Analyse des délais de livraison
+note right of UC23 : Statistiques des retours
+note right of UC24 : Rapport des incidents et problèmes
+
+@enduml 

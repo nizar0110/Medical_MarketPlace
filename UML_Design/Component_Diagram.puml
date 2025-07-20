@@ -1,0 +1,109 @@
+@startuml Medical_MarketPlace_Component_Diagram
+
+package "Frontend Layer" {
+    [Web Interface] as WebUI
+    [Mobile Interface] as MobileUI
+    [Admin Dashboard] as AdminUI
+}
+
+package "Presentation Layer" {
+    [Controllers] as Controllers
+    [Middleware] as Middleware
+    [Views] as Views
+    [Routes] as Routes
+}
+
+package "Business Logic Layer" {
+    [Services] as Services
+    [Repositories] as Repositories
+    [Validators] as Validators
+    [Helpers] as Helpers
+}
+
+package "Data Access Layer" {
+    [Models] as Models
+    [Database] as Database
+    [Cache] as Cache
+    [File Storage] as FileStorage
+}
+
+package "External Services" {
+    [Payment Gateway] as Payment
+    [Email Service] as Email
+    [SMS Service] as SMS
+    [Analytics] as Analytics
+}
+
+package "Security Layer" {
+    [Authentication] as Auth
+    [Authorization] as Authorization
+    [Encryption] as Encryption
+    [CSRF Protection] as CSRF
+}
+
+package "Utilities" {
+    [Logging] as Logging
+    [Notifications] as Notifications
+    [Queue System] as Queue
+    [Caching] as Caching
+}
+
+' Frontend connections
+WebUI --> Controllers
+MobileUI --> Controllers
+AdminUI --> Controllers
+
+' Presentation layer connections
+Controllers --> Services
+Controllers --> Models
+Controllers --> Views
+Routes --> Controllers
+Middleware --> Controllers
+
+' Business logic connections
+Services --> Repositories
+Services --> Validators
+Services --> External Services
+Repositories --> Models
+Validators --> Models
+
+' Data access connections
+Models --> Database
+Models --> Cache
+Models --> FileStorage
+
+' Security connections
+Controllers --> Auth
+Controllers --> Authorization
+Controllers --> CSRF
+Auth --> Encryption
+
+' Utility connections
+Services --> Logging
+Services --> Notifications
+Services --> Queue
+Services --> Caching
+
+' External service connections
+Services --> Payment
+Services --> Email
+Services --> SMS
+Services --> Analytics
+
+' Component interfaces
+interface "ProductAPI" as ProductAPI
+interface "OrderAPI" as OrderAPI
+interface "UserAPI" as UserAPI
+interface "PaymentAPI" as PaymentAPI
+
+Controllers --> ProductAPI
+Controllers --> OrderAPI
+Controllers --> UserAPI
+Controllers --> PaymentAPI
+
+Services --> ProductAPI
+Services --> OrderAPI
+Services --> UserAPI
+Services --> PaymentAPI
+
+@enduml 

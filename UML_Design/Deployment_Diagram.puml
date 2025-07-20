@@ -1,0 +1,84 @@
+@startuml Medical_MarketPlace_Deployment_Diagram
+
+!define RECTANGLE node
+
+node "Client Web" as Client {
+    artifact "Navigateur Web" as Browser
+    artifact "Application Mobile" as Mobile
+}
+
+node "Serveur Web" as WebServer {
+    artifact "Nginx/Apache" as WebServer
+    artifact "Laravel Application" as LaravelApp
+    artifact "Bootstrap CSS/JS" as Bootstrap
+    artifact "Vue.js Components" as VueJS
+}
+
+node "Serveur d'Application" as AppServer {
+    artifact "PHP 8.2+" as PHP
+    artifact "Laravel Framework" as Laravel
+    artifact "Controllers" as Controllers
+    artifact "Models" as Models
+    artifact "Services" as Services
+    artifact "Middleware" as Middleware
+}
+
+node "Base de Données" as Database {
+    artifact "MySQL/PostgreSQL" as DBMS
+    artifact "Tables" as Tables
+    artifact "Indexes" as Indexes
+    artifact "Stored Procedures" as Procedures
+}
+
+node "Cache & Session" as Cache {
+    artifact "Redis" as Redis
+    artifact "Session Storage" as Session
+    artifact "Cache Storage" as CacheStorage
+}
+
+node "Stockage Fichiers" as Storage {
+    artifact "File System" as FileSystem
+    artifact "Images Produits" as ProductImages
+    artifact "Documents" as Documents
+}
+
+node "Services Externes" as External {
+    artifact "Payment Gateway" as Payment
+    artifact "Email Service" as Email
+    artifact "SMS Service" as SMS
+    artifact "Analytics" as Analytics
+}
+
+node "Monitoring" as Monitoring {
+    artifact "Logs" as Logs
+    artifact "Metrics" as Metrics
+    artifact "Alerts" as Alerts
+}
+
+' Connections
+Client --> WebServer : HTTP/HTTPS
+WebServer --> AppServer : PHP Requests
+AppServer --> Database : SQL Queries
+AppServer --> Cache : Cache/Session
+AppServer --> Storage : File Operations
+AppServer --> External : API Calls
+AppServer --> Monitoring : Logs/Metrics
+
+' Internal connections
+LaravelApp --> Controllers
+Controllers --> Models
+Models --> Services
+Services --> External
+
+' Database connections
+Tables --> Indexes
+Tables --> Procedures
+
+' Cache connections
+Session --> CacheStorage
+
+' Storage connections
+ProductImages --> FileSystem
+Documents --> FileSystem
+
+@enduml 

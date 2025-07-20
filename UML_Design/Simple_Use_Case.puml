@@ -1,0 +1,30 @@
+@startuml Simple Medical Marketplace
+!theme plain
+skinparam backgroundColor white
+skinparam actorStyle awesome
+
+actor "Client" as C
+actor "Admin" as A
+
+rectangle "Medical Marketplace" {
+    usecase "S'inscrire" as UC1
+    usecase "Se connecter" as UC2
+    usecase "Rechercher produits" as UC3
+    usecase "Voir détails produit" as UC4
+    usecase "Ajouter au panier" as UC5
+    usecase "Passer commande" as UC6
+    usecase "Gérer produits" as UC7
+    usecase "Gérer commandes" as UC8
+}
+
+C --> UC1
+C --> UC2
+C --> UC3
+C --> UC4
+C --> UC5
+C --> UC6
+
+A --> UC7
+A --> UC8
+
+@enduml 

@@ -1,0 +1,28 @@
+@startuml Use_Case_Cart
+
+left to right direction
+skinparam packageStyle rectangle
+
+actor "Client" as Customer
+
+rectangle "Gestion du Panier" {
+    usecase "Ajouter au panier" as AddToCart
+    usecase "Modifier quantité" as UpdateQuantity
+    usecase "Supprimer article" as RemoveItem
+    usecase "Voir panier" as ViewCart
+    usecase "Vider panier" as ClearCart
+}
+
+Customer --> AddToCart
+Customer --> ViewCart
+ViewCart --> UpdateQuantity
+ViewCart --> RemoveItem
+ViewCart --> ClearCart
+
+note right of AddToCart : Produit + quantité
+note right of UpdateQuantity : Nouvelle quantité
+note right of RemoveItem : Suppression définitive
+note right of ViewCart : Liste des articles
+note right of ClearCart : Confirmation requise
+
+@enduml 

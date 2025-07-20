@@ -1,0 +1,156 @@
+@startuml Medical_MarketPlace_Use_Case_Detailed
+
+!define RECTANGLE usecase
+!define ACTOR actor
+
+left to right direction
+skinparam packageStyle rectangle
+skinparam usecase {
+    BackgroundColor LightBlue
+    BorderColor DarkBlue
+    ArrowColor DarkBlue
+}
+
+' Acteurs principaux
+actor "Visiteur" as Visitor #LightGray
+actor "Client" as Customer #LightGreen
+actor "Administrateur" as Admin #LightYellow
+actor "Gestionnaire" as Manager #LightCyan
+actor "Système de Paiement" as Payment #Pink
+actor "Système de Livraison" as Shipping #Orange
+
+' Système principal
+rectangle "Medical MarketPlace" {
+    
+    ' Cas d'usage pour Visiteur
+    usecase "Consulter les produits" as UC1
+    usecase "Rechercher des produits" as UC2
+    usecase "Voir les détails d'un produit" as UC3
+    usecase "S'inscrire" as UC4
+    usecase "Se connecter" as UC5
+    usecase "Consulter les avis" as UC6
+    usecase "Comparer les produits" as UC7
+    
+    ' Cas d'usage pour Client
+    usecase "Gérer le profil" as UC8
+    usecase "Ajouter au panier" as UC9
+    usecase "Gérer le panier" as UC10
+    usecase "Passer une commande" as UC11
+    usecase "Suivre les commandes" as UC12
+    usecase "Laisser un avis" as UC13
+    usecase "Ajouter aux favoris" as UC14
+    usecase "Gérer les adresses" as UC15
+    usecase "Consulter l'historique" as UC16
+    usecase "Demander un retour" as UC17
+    usecase "Contacter le support" as UC18
+    
+    ' Cas d'usage pour Administrateur
+    usecase "Gérer les catégories" as UC19
+    usecase "Gérer les produits" as UC20
+    usecase "Gérer les commandes" as UC21
+    usecase "Gérer les utilisateurs" as UC22
+    usecase "Générer des rapports" as UC23
+    usecase "Gérer les paiements" as UC24
+    usecase "Gérer les stocks" as UC25
+    usecase "Gérer les promotions" as UC26
+    usecase "Modérer les avis" as UC27
+    usecase "Configurer le système" as UC28
+    
+    ' Cas d'usage pour Gestionnaire
+    usecase "Traiter les commandes" as UC29
+    usecase "Gérer les retours" as UC30
+    usecase "Suivre les livraisons" as UC31
+    usecase "Gérer les alertes stock" as UC32
+    
+    ' Cas d'usage système
+    usecase "Traiter le paiement" as UC33
+    usecase "Calculer les frais de livraison" as UC34
+    usecase "Générer la facture" as UC35
+    usecase "Envoyer les notifications" as UC36
+    usecase "Mettre à jour le stock" as UC37
+    usecase "Valider la commande" as UC38
+}
+
+' Relations Visiteur
+Visitor --> UC1
+Visitor --> UC2
+Visitor --> UC3
+Visitor --> UC4
+Visitor --> UC5
+Visitor --> UC6
+Visitor --> UC7
+
+' Relations Client
+Customer --> UC1
+Customer --> UC2
+Customer --> UC3
+Customer --> UC8
+Customer --> UC9
+Customer --> UC10
+Customer --> UC11
+Customer --> UC12
+Customer --> UC13
+Customer --> UC14
+Customer --> UC15
+Customer --> UC16
+Customer --> UC17
+Customer --> UC18
+
+' Relations Administrateur
+Admin --> UC19
+Admin --> UC20
+Admin --> UC21
+Admin --> UC22
+Admin --> UC23
+Admin --> UC24
+Admin --> UC25
+Admin --> UC26
+Admin --> UC27
+Admin --> UC28
+
+' Relations Gestionnaire
+Manager --> UC29
+Manager --> UC30
+Manager --> UC31
+Manager --> UC32
+
+' Relations système
+Payment --> UC33
+Shipping --> UC34
+
+' Include relationships
+UC3 ..> UC1 : <<include>>
+UC11 ..> UC9 : <<include>>
+UC11 ..> UC10 : <<include>>
+UC11 ..> UC33 : <<include>>
+UC11 ..> UC34 : <<include>>
+UC11 ..> UC35 : <<include>>
+UC11 ..> UC36 : <<include>>
+UC11 ..> UC37 : <<include>>
+UC11 ..> UC38 : <<include>>
+UC12 ..> UC11 : <<include>>
+UC13 ..> UC3 : <<include>>
+UC14 ..> UC3 : <<include>>
+UC17 ..> UC12 : <<include>>
+UC29 ..> UC21 : <<include>>
+UC30 ..> UC17 : <<include>>
+UC31 ..> UC21 : <<include>>
+UC32 ..> UC25 : <<include>>
+
+' Extend relationships
+UC2 ..> UC1 : <<extend>>
+UC7 ..> UC3 : <<extend>>
+UC10 ..> UC9 : <<extend>>
+UC15 ..> UC8 : <<extend>>
+UC16 ..> UC12 : <<extend>>
+UC27 ..> UC13 : <<extend>>
+
+' Notes explicatives
+note right of UC1 : Consultation du catalogue
+note right of UC2 : Recherche par nom, marque, catégorie
+note right of UC3 : Fiche détaillée avec photos et avis
+note right of UC11 : Processus complet d'achat
+note right of UC21 : Gestion des statuts de commande
+note right of UC33 : Intégration avec les prestataires
+
+@enduml 

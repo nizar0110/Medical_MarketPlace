@@ -1,0 +1,22 @@
+@startuml Use_Case_Register
+
+left to right direction
+skinparam packageStyle rectangle
+
+actor "Visiteur" as Visitor
+
+rectangle "Système d'Inscription" {
+    usecase "S'inscrire" as Register
+    usecase "Valider email" as ValidateEmail
+    usecase "Compléter profil" as CompleteProfile
+}
+
+Visitor --> Register
+Register ..> ValidateEmail : <<include>>
+Register ..> CompleteProfile : <<extend>>
+
+note right of Register : Nom, email, mot de passe
+note right of ValidateEmail : Lien de confirmation
+note right of CompleteProfile : Adresse, téléphone
+
+@enduml 

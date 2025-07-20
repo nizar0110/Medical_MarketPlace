@@ -1,0 +1,52 @@
+@startuml Simple Database Schema
+!theme plain
+skinparam backgroundColor white
+
+entity "users" {
+    * id : int
+    --
+    * name : varchar(255)
+    * email : varchar(255)
+    * password : varchar(255)
+    * role : varchar(50)
+    * created_at : timestamp
+    * updated_at : timestamp
+}
+
+entity "products" {
+    * id : int
+    --
+    * name : varchar(255)
+    * description : text
+    * price : decimal(10,2)
+    * stock : int
+    * category : varchar(100)
+    * image : varchar(255)
+    * created_at : timestamp
+    * updated_at : timestamp
+}
+
+entity "orders" {
+    * id : int
+    --
+    * user_id : int
+    * total : decimal(10,2)
+    * status : varchar(50)
+    * created_at : timestamp
+    * updated_at : timestamp
+}
+
+entity "order_items" {
+    * id : int
+    --
+    * order_id : int
+    * product_id : int
+    * quantity : int
+    * price : decimal(10,2)
+}
+
+users ||--o{ orders : "passe"
+orders ||--o{ order_items : "contient"
+products ||--o{ order_items : "inclus dans"
+
+@enduml 

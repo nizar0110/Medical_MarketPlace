@@ -1,0 +1,22 @@
+@startuml Use_Case_Login
+
+left to right direction
+skinparam packageStyle rectangle
+
+actor "Utilisateur" as User
+
+rectangle "Système de Connexion" {
+    usecase "Se connecter" as Login
+    usecase "Récupérer mot de passe" as ResetPassword
+    usecase "Se souvenir de moi" as RememberMe
+}
+
+User --> Login
+User --> ResetPassword
+User --> RememberMe
+
+note right of Login : Email + mot de passe
+note right of ResetPassword : Envoi email de récupération
+note right of RememberMe : Session persistante
+
+@enduml 

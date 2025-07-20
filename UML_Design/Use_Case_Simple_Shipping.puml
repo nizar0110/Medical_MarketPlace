@@ -1,0 +1,30 @@
+@startuml Use_Case_Shipping
+
+left to right direction
+skinparam packageStyle rectangle
+
+actor "Client" as Customer
+actor "Transporteur" as Carrier
+
+rectangle "Système de Livraison" {
+    usecase "Choisir livraison" as ChooseShipping
+    usecase "Calculer frais" as CalculateFees
+    usecase "Suivre colis" as TrackPackage
+    usecase "Recevoir notification" as ReceiveNotification
+    usecase "Confirmer réception" as ConfirmDelivery
+}
+
+Customer --> ChooseShipping
+Customer --> TrackPackage
+Customer --> ConfirmDelivery
+ChooseShipping --> CalculateFees
+Carrier --> TrackPackage
+Carrier --> ReceiveNotification
+
+note right of ChooseShipping : Standard, Express, Point relais
+note right of CalculateFees : Selon poids et destination
+note right of TrackPackage : Numéro de suivi
+note right of ReceiveNotification : Email, SMS
+note right of ConfirmDelivery : Réception confirmée
+
+@enduml 

@@ -1,0 +1,39 @@
+@startuml Simple Purchase Sequence
+!theme plain
+skinparam backgroundColor white
+
+actor Client
+participant "Interface" as UI
+participant "Controller" as C
+participant "Database" as DB
+
+Client -> UI: Rechercher produit
+UI -> C: searchProducts()
+C -> DB: SELECT products
+DB --> C: Liste produits
+C --> UI: Afficher résultats
+UI --> Client: Résultats recherche
+
+Client -> UI: Voir détails produit
+UI -> C: getProduct(id)
+C -> DB: SELECT product
+DB --> C: Détails produit
+C --> UI: Afficher détails
+UI --> Client: Détails produit
+
+Client -> UI: Ajouter au panier
+UI -> C: addToCart(product_id, quantity)
+C -> DB: INSERT order_items
+DB --> C: Confirmation
+C --> UI: Produit ajouté
+UI --> Client: Confirmation
+
+Client -> UI: Passer commande
+UI -> C: createOrder()
+C -> DB: INSERT order
+C -> DB: UPDATE stock
+DB --> C: Commande créée
+C --> UI: Commande confirmée
+UI --> Client: Commande validée
+
+@enduml 

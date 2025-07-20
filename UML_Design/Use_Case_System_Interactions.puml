@@ -1,0 +1,129 @@
+@startuml Use_Case_System_Interactions
+
+left to right direction
+skinparam packageStyle rectangle
+
+actor "Système de Paiement" as PaymentSystem
+actor "Système de Livraison" as ShippingSystem
+actor "Système de Notification" as NotificationSystem
+actor "Système de Stock" as StockSystem
+actor "Système de Facturation" as BillingSystem
+
+rectangle "Medical MarketPlace - Interactions Système" {
+    
+    ' Interactions Paiement
+    usecase "Traiter le paiement" as UC1
+    usecase "Valider la transaction" as UC2
+    usecase "Générer la facture" as UC3
+    usecase "Confirmer le paiement" as UC4
+    usecase "Gérer les échecs de paiement" as UC5
+    
+    ' Interactions Livraison
+    usecase "Calculer les frais de livraison" as UC6
+    usecase "Générer l'étiquette de livraison" as UC7
+    usecase "Suivre le colis" as UC8
+    usecase "Confirmer la livraison" as UC9
+    usecase "Gérer les incidents de livraison" as UC10
+    
+    ' Interactions Stock
+    usecase "Vérifier la disponibilité" as UC11
+    usecase "Réserver le stock" as UC12
+    usecase "Mettre à jour le stock" as UC13
+    usecase "Alerter rupture de stock" as UC14
+    usecase "Synchroniser les stocks" as UC15
+    
+    ' Interactions Notifications
+    usecase "Envoyer confirmation de commande" as UC16
+    usecase "Notifier le statut de livraison" as UC17
+    usecase "Alerter rupture de stock" as UC18
+    usecase "Confirmer le paiement" as UC19
+    usecase "Notifier les retours" as UC20
+    
+    ' Interactions Facturation
+    usecase "Générer la facture PDF" as UC21
+    usecase "Calculer les taxes" as UC22
+    usecase "Appliquer les promotions" as UC23
+    usecase "Générer le reçu" as UC24
+    usecase "Traiter les remboursements" as UC25
+}
+
+' Relations Système de Paiement
+PaymentSystem --> UC1
+PaymentSystem --> UC2
+PaymentSystem --> UC4
+PaymentSystem --> UC5
+
+' Relations Système de Livraison
+ShippingSystem --> UC6
+ShippingSystem --> UC7
+ShippingSystem --> UC8
+ShippingSystem --> UC9
+ShippingSystem --> UC10
+
+' Relations Système de Stock
+StockSystem --> UC11
+StockSystem --> UC12
+StockSystem --> UC13
+StockSystem --> UC14
+StockSystem --> UC15
+
+' Relations Système de Notification
+NotificationSystem --> UC16
+NotificationSystem --> UC17
+NotificationSystem --> UC18
+NotificationSystem --> UC19
+NotificationSystem --> UC20
+
+' Relations Système de Facturation
+BillingSystem --> UC21
+BillingSystem --> UC22
+BillingSystem --> UC23
+BillingSystem --> UC24
+BillingSystem --> UC25
+
+' Include relationships
+UC1 ..> UC2 : <<include>>
+UC2 ..> UC4 : <<include>>
+UC1 ..> UC5 : <<extend>>
+UC6 ..> UC7 : <<include>>
+UC7 ..> UC8 : <<include>>
+UC8 ..> UC9 : <<include>>
+UC8 ..> UC10 : <<extend>>
+UC11 ..> UC12 : <<include>>
+UC12 ..> UC13 : <<include>>
+UC13 ..> UC14 : <<extend>>
+UC16 ..> UC19 : <<include>>
+UC17 ..> UC9 : <<include>>
+UC18 ..> UC14 : <<include>>
+UC21 ..> UC22 : <<include>>
+UC22 ..> UC23 : <<include>>
+UC23 ..> UC24 : <<include>>
+UC25 ..> UC4 : <<include>>
+
+note right of UC1 : Traitement sécurisé des paiements
+note right of UC2 : Validation avec la banque
+note right of UC3 : Génération automatique de facture
+note right of UC4 : Confirmation de transaction réussie
+note right of UC5 : Gestion des erreurs de paiement
+note right of UC6 : Calcul selon poids et destination
+note right of UC7 : Génération d'étiquette transporteur
+note right of UC8 : Suivi en temps réel
+note right of UC9 : Confirmation de livraison
+note right of UC10 : Gestion des incidents
+note right of UC11 : Vérification disponibilité produit
+note right of UC12 : Réservation temporaire du stock
+note right of UC13 : Mise à jour après commande
+note right of UC14 : Alerte automatique de rupture
+note right of UC15 : Synchronisation multi-entrepôts
+note right of UC16 : Email de confirmation commande
+note right of UC17 : SMS/Email de suivi livraison
+note right of UC18 : Notification rupture de stock
+note right of UC19 : Confirmation paiement reçu
+note right of UC20 : Notification retour/remboursement
+note right of UC21 : Génération facture PDF
+note right of UC22 : Calcul TVA et taxes
+note right of UC23 : Application codes promo
+note right of UC24 : Génération reçu de paiement
+note right of UC25 : Traitement remboursements
+
+@enduml 

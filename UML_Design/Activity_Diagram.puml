@@ -1,0 +1,84 @@
+@startuml Medical_MarketPlace_Activity_Diagram
+
+start
+
+:Arrivée sur le site;
+:Consulter les produits;
+
+if (Recherche spécifique ?) then (oui)
+    :Saisir critères de recherche;
+    :Filtrer les produits;
+else (non)
+    :Parcourir les catégories;
+endif
+
+:Consulter un produit;
+:Voir les détails;
+
+if (Produit intéressant ?) then (oui)
+    :Ajouter au panier;
+    :Confirmer l'ajout;
+    
+    if (Continuer les achats ?) then (oui)
+        :Retourner à la liste;
+        repeat
+            :Consulter un produit;
+            :Ajouter au panier;
+        repeat while (Continuer ?) is (oui)
+    else (non)
+        :Aller au panier;
+    endif
+    
+    :Vérifier le panier;
+    :Modifier les quantités si nécessaire;
+    
+    if (Panier satisfaisant ?) then (oui)
+        :Procéder au checkout;
+        
+        if (Utilisateur connecté ?) then (non)
+            :S'inscrire ou se connecter;
+        endif
+        
+        :Remplir les informations de livraison;
+        :Choisir le mode de paiement;
+        :Saisir les informations de paiement;
+        
+        :Valider la commande;
+        
+        if (Paiement accepté ?) then (oui)
+            :Confirmer la commande;
+            :Générer la facture;
+            :Envoyer la confirmation par email;
+            :Mettre à jour le stock;
+            :Vider le panier;
+            
+            :Afficher la confirmation;
+            :Numéro de commande généré;
+            
+        else (non)
+            :Afficher l'erreur de paiement;
+            :Retourner au panier;
+        endif
+        
+    else (non)
+        :Modifier le panier;
+        :Retourner aux achats;
+    endif
+    
+else (non)
+    :Continuer la navigation;
+    :Retourner à la liste;
+endif
+
+if (Autres actions ?) then (oui)
+    :Consulter les favoris;
+    :Voir l'historique des commandes;
+    :Laisser des avis;
+    :Gérer le profil;
+else (non)
+    :Quitter le site;
+endif
+
+stop
+
+@enduml 

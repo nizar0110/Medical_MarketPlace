@@ -1,0 +1,29 @@
+@startuml Use_Case_Return
+
+left to right direction
+skinparam packageStyle rectangle
+
+actor "Client" as Customer
+actor "Gestionnaire" as Manager
+
+rectangle "Système de Retours" {
+    usecase "Demander retour" as RequestReturn
+    usecase "Valider retour" as ValidateReturn
+    usecase "Générer étiquette" as GenerateLabel
+    usecase "Traiter remboursement" as ProcessRefund
+    usecase "Confirmer retour" as ConfirmReturn
+}
+
+Customer --> RequestReturn
+Manager --> ValidateReturn
+ValidateReturn --> GenerateLabel
+ValidateReturn --> ProcessRefund
+Customer --> ConfirmReturn
+
+note right of RequestReturn : Motif + photos
+note right of ValidateReturn : Conditions respectées
+note right of GenerateLabel : Étiquette retour
+note right of ProcessRefund : Remboursement
+note right of ConfirmReturn : Retour reçu
+
+@enduml 

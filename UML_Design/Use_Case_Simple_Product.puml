@@ -1,0 +1,29 @@
+@startuml Use_Case_Product
+
+left to right direction
+skinparam packageStyle rectangle
+
+actor "Administrateur" as Admin
+
+rectangle "Gestion des Produits" {
+    usecase "Ajouter produit" as AddProduct
+    usecase "Modifier produit" as EditProduct
+    usecase "Supprimer produit" as DeleteProduct
+    usecase "Gérer stock" as ManageStock
+    usecase "Uploader image" as UploadImage
+}
+
+Admin --> AddProduct
+Admin --> EditProduct
+Admin --> DeleteProduct
+Admin --> ManageStock
+AddProduct --> UploadImage
+EditProduct --> UploadImage
+
+note right of AddProduct : Nom, prix, description
+note right of EditProduct : Modification des données
+note right of DeleteProduct : Confirmation requise
+note right of ManageStock : Quantité disponible
+note right of UploadImage : Photos du produit
+
+@enduml 

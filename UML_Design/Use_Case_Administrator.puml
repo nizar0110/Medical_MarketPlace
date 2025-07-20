@@ -1,0 +1,112 @@
+@startuml Use_Case_Administrator
+
+left to right direction
+skinparam packageStyle rectangle
+
+actor "Administrateur" as Admin
+
+rectangle "Medical MarketPlace - Administration" {
+    
+    ' Gestion des produits
+    usecase "Gérer les catégories" as UC1
+    usecase "Ajouter un produit" as UC2
+    usecase "Modifier un produit" as UC3
+    usecase "Supprimer un produit" as UC4
+    usecase "Gérer les stocks" as UC5
+    usecase "Uploader des images" as UC6
+    
+    ' Gestion des commandes
+    usecase "Voir toutes les commandes" as UC7
+    usecase "Changer le statut d'une commande" as UC8
+    usecase "Gérer les commandes urgentes" as UC9
+    usecase "Traiter les retours" as UC10
+    
+    ' Gestion des utilisateurs
+    usecase "Voir la liste des clients" as UC11
+    usecase "Modifier les permissions" as UC12
+    usecase "Désactiver un compte" as UC13
+    usecase "Créer un administrateur" as UC14
+    
+    ' Rapports et analytics
+    usecase "Générer des rapports de vente" as UC15
+    usecase "Voir les statistiques" as UC16
+    usecase "Exporter les données" as UC17
+    usecase "Analyser les performances" as UC18
+    
+    ' Configuration système
+    usecase "Configurer les paramètres" as UC19
+    usecase "Gérer les promotions" as UC20
+    usecase "Modérer les avis" as UC21
+    usecase "Gérer les paiements" as UC22
+    usecase "Configurer la livraison" as UC23
+    usecase "Gérer les notifications" as UC24
+}
+
+' Relations Administrateur
+Admin --> UC1
+Admin --> UC2
+Admin --> UC3
+Admin --> UC4
+Admin --> UC5
+Admin --> UC6
+Admin --> UC7
+Admin --> UC8
+Admin --> UC9
+Admin --> UC10
+Admin --> UC11
+Admin --> UC12
+Admin --> UC13
+Admin --> UC14
+Admin --> UC15
+Admin --> UC16
+Admin --> UC17
+Admin --> UC18
+Admin --> UC19
+Admin --> UC20
+Admin --> UC21
+Admin --> UC22
+Admin --> UC23
+Admin --> UC24
+
+' Include relationships
+UC2 ..> UC1 : <<include>>
+UC3 ..> UC1 : <<include>>
+UC2 ..> UC6 : <<include>>
+UC3 ..> UC6 : <<include>>
+UC8 ..> UC7 : <<include>>
+UC10 ..> UC7 : <<include>>
+UC12 ..> UC11 : <<include>>
+UC13 ..> UC11 : <<include>>
+UC15 ..> UC16 : <<include>>
+UC17 ..> UC15 : <<include>>
+
+' Extend relationships
+UC9 ..> UC7 : <<extend>>
+UC18 ..> UC16 : <<extend>>
+
+note right of UC1 : Création et gestion des catégories
+note right of UC2 : Ajout de nouveaux produits
+note right of UC3 : Modification des informations produit
+note right of UC4 : Suppression avec confirmation
+note right of UC5 : Gestion des quantités en stock
+note right of UC6 : Upload et optimisation d'images
+note right of UC7 : Vue d'ensemble des commandes
+note right of UC8 : Changement de statut (en attente, validée, etc.)
+note right of UC9 : Traitement prioritaire des commandes urgentes
+note right of UC10 : Validation et traitement des retours
+note right of UC11 : Liste complète des clients
+note right of UC12 : Attribution des rôles et permissions
+note right of UC13 : Désactivation temporaire ou définitive
+note right of UC14 : Création de nouveaux administrateurs
+note right of UC15 : Rapports de vente (quotidien, mensuel, annuel)
+note right of UC16 : Statistiques en temps réel
+note right of UC17 : Export PDF, Excel, CSV
+note right of UC18 : Analyse des performances du site
+note right of UC19 : Configuration générale du système
+note right of UC20 : Création et gestion des promotions
+note right of UC21 : Modération des avis clients
+note right of UC22 : Configuration des prestataires de paiement
+note right of UC23 : Configuration des transporteurs
+note right of UC24 : Gestion des notifications automatiques
+
+@enduml 

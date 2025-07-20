@@ -1,0 +1,32 @@
+@startuml Use_Case_Review
+
+left to right direction
+skinparam packageStyle rectangle
+
+actor "Client" as Customer
+actor "Administrateur" as Admin
+
+rectangle "Système d'Avis" {
+    usecase "Laisser avis" as LeaveReview
+    usecase "Noter produit" as RateProduct
+    usecase "Modérer avis" as ModerateReview
+    usecase "Voir avis" as ViewReviews
+    usecase "Signaler avis" as ReportReview
+}
+
+Customer --> LeaveReview
+Customer --> RateProduct
+Customer --> ViewReviews
+Customer --> ReportReview
+Admin --> ModerateReview
+
+LeaveReview --> RateProduct
+ReportReview --> ModerateReview
+
+note right of LeaveReview : Commentaire + note
+note right of RateProduct : 1 à 5 étoiles
+note right of ModerateReview : Approuver/Refuser
+note right of ViewReviews : Liste des avis
+note right of ReportReview : Avis inapproprié
+
+@enduml 
