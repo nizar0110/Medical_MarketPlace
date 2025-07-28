@@ -19,13 +19,17 @@ Route::get('/dashboard', function () {
 Route::post('/chatbot/chat', [ChatbotController::class, 'chat'])->name('chatbot.chat');
 Route::get('/chatbot', [ChatbotController::class, 'index'])->name('chatbot.index');
 
+Route::get('/categories/{category}', [\App\Http\Controllers\CategoryController::class, 'show'])->name('categories.show');
+
+// Routes publiques pour les produits
+Route::resource('products', ProductController::class);
+
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
     
-    // Routes pour les produits
-    Route::resource('products', ProductController::class);
+    // Routes pour les catégories
     Route::resource('categories', CategoryController::class);
     
     // Routes pour le panier
@@ -37,7 +41,12 @@ Route::middleware('auth')->group(function () {
     
     // Routes pour les tableaux de bord
     Route::get('/seller/dashboard', function () {
-        return view('seller.dashboard');
+        $user = auth()->user();
+        $recentProducts = $user->products()->latest()->take(5)->get();
+        $productsCount = $user->products()->count();
+        $ordersCount = 0; // À adapter si tu veux afficher les vraies commandes
+        $revenue = 0; // À adapter si tu veux afficher le vrai chiffre d'affaires
+        return view('seller.dashboard', compact('recentProducts', 'productsCount', 'ordersCount', 'revenue'));
     })->name('seller.dashboard')->middleware('role:seller');
     
     Route::get('/client/dashboard', function () {

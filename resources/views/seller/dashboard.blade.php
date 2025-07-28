@@ -37,7 +37,7 @@
                             </div>
                             <div class="ml-4">
                                 <p class="text-sm font-medium text-gray-500">Chiffre d'affaires</p>
-                                <p class="text-2xl font-semibold text-gray-900">15,420 DH</p>
+                                <p class="text-2xl font-semibold text-gray-900">{{ number_format($revenue ?? 0, 2) }} DH</p>
                             </div>
                         </div>
                     </div>
@@ -103,7 +103,7 @@
                                     @endif
                                     <div class="flex-1">
                                         <h4 class="font-medium text-gray-900">{{ $product->name }}</h4>
-                                        <p class="text-sm text-gray-500">{{ number_format($product->price, 2) }} €</p>
+                                        <p class="text-sm text-gray-500">{{ number_format($product->price, 2) }} DH</p>
                                         <p class="text-sm text-gray-500">Stock: {{ $product->stock }}</p>
                                     </div>
                                     <div class="flex space-x-2">

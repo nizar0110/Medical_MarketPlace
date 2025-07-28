@@ -1,80 +1,119 @@
-<x-app-layout>
-    <x-slot name="header">
-        <div class="flex justify-between items-center">
-            <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-                {{ __('Produits') }}
-            </h2>
-            <a href="{{ route('products.create') }}" class="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded">
-                Ajouter un produit
-            </a>
+@extends('layouts.app')
+
+@section('content')
+<div class="container py-4">
+    <!-- En-tête avec recherche -->
+    <div class="row mb-4">
+        <div class="col-12">
+            <div class="d-flex justify-content-between align-items-center">
+                <h1 class="h2 mb-0">Nos Produits</h1>
+                <form action="{{ route('products.index') }}" method="GET" class="d-flex" style="max-width: 300px;">
+                    <input type="text" name="search" value="{{ request('search') }}" placeholder="Rechercher..." class="form-control me-2">
+                    <button type="submit" class="btn btn-primary">
+                        <i class="fas fa-search"></i>
+                    </button>
+                </form>
+            </div>
         </div>
-    </x-slot>
+    </div>
 
-    <div class="py-12">
-        <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
-            <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
-                <div class="p-6 text-gray-900">
-                    @if(session('success'))
-                        <div class="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded mb-4">
-                            {{ session('success') }}
-                        </div>
-                    @endif
-
-                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                        @foreach($products as $product)
-                            <div class="bg-white rounded-lg shadow-md overflow-hidden">
-                                @if($product->image)
-                                    <img src="{{ asset('storage/' . $product->image) }}" class="w-full h-48 object-cover" alt="{{ $product->name }}">
-                                @else
-                                    <div class="w-full h-48 bg-gray-200 flex items-center justify-center">
-                                        <span class="text-gray-500">Aucune image</span>
-                                    </div>
-                                @endif
-                                <div class="p-4">
-                                    <h3 class="text-lg font-semibold text-gray-800 mb-2">{{ $product->name }}</h3>
-                                    <p class="text-gray-600 text-sm mb-3">{{ Str::limit($product->description, 100) }}</p>
-                                    <div class="flex items-center justify-between mb-3">
-                                        <span class="bg-green-100 text-green-800 text-sm font-medium px-2.5 py-0.5 rounded">
-                                            {{ number_format($product->price, 2) }} DH
-                                        </span>
-                                        <span class="text-sm text-gray-500">Stock: {{ $product->stock }}</span>
-                                    </div>
-                                    <div class="flex space-x-2">
-                                        <a href="{{ route('products.show', $product) }}" class="bg-blue-500 hover:bg-blue-700 text-white text-sm font-bold py-2 px-4 rounded">
-                                            Voir
-                                        </a>
-                                        @if($product->stock > 0)
-                                            <form action="{{ route('cart.add', $product->id) }}" method="POST" class="inline">
-                                                @csrf
-                                                <input type="hidden" name="quantity" value="1">
-                                                <button type="submit" class="bg-green-500 hover:bg-green-700 text-white text-sm font-bold py-2 px-4 rounded">
-                                                    Panier
-                                                </button>
-                                            </form>
-                                        @endif
-                                        <a href="{{ route('products.edit', $product) }}" class="bg-yellow-500 hover:bg-yellow-700 text-white text-sm font-bold py-2 px-4 rounded">
-                                            Modifier
-                                        </a>
-                                        <form action="{{ route('products.destroy', $product) }}" method="POST" class="inline" onsubmit="return confirm('Supprimer ce produit ?');">
-                                            @csrf
-                                            @method('DELETE')
-                                            <button class="bg-red-500 hover:bg-red-700 text-white text-sm font-bold py-2 px-4 rounded" type="submit">
-                                                Supprimer
-                                            </button>
-                                        </form>
-                                    </div>
-                                </div>
-                            </div>
-                        @endforeach
-                    </div>
-
-                    @if($products->isEmpty())
-                        <div class="text-center py-8">
-                            <p class="text-gray-500">Aucun produit trouvé.</p>
-                        </div>
-                    @endif
+    <!-- Filtres et tri -->
+    <div class="row mb-4">
+        <div class="col-12">
+            <div class="d-flex justify-content-between align-items-center">
+                <div class="d-flex gap-2">
+                    <span class="text-muted">{{ $products->total() }} produits trouvés</span>
+                </div>
+                <div class="d-flex gap-2">
+                    <select class="form-select form-select-sm" style="width: auto;">
+                        <option>Trier par</option>
+                        <option>Prix croissant</option>
+                        <option>Prix décroissant</option>
+                        <option>Nom A-Z</option>
+                        <option>Nom Z-A</option>
+                    </select>
                 </div>
             </div>
         </div>
     </div>
-</x-app-layout> 
+
+    <!-- Grille des produits -->
+    <div class="row g-4">
+        @forelse($products as $product)
+            <div class="col-lg-3 col-md-4 col-sm-6">
+                <div class="card h-100 shadow-sm hover-shadow">
+                    @if($product->image)
+                        <img src="{{ asset('storage/' . $product->image) }}" class="card-img-top" alt="{{ $product->name }}" style="height: 200px; object-fit: cover;">
+                    @else
+                        <div class="card-img-top bg-light d-flex align-items-center justify-content-center" style="height: 200px;">
+                            <i class="fas fa-image fa-3x text-muted"></i>
+                        </div>
+                    @endif
+                    
+                    <div class="card-body d-flex flex-column">
+                        <h5 class="card-title fw-bold">{{ $product->name }}</h5>
+                        <p class="card-text text-muted small">{{ Str::limit($product->description, 80) }}</p>
+                        
+                        <div class="mt-auto">
+                            <div class="d-flex justify-content-between align-items-center mb-3">
+                                <span class="h5 text-primary mb-0">{{ number_format($product->price, 2) }} DH</span>
+                                <span class="badge bg-{{ $product->stock > 0 ? 'success' : 'danger' }}">
+                                    {{ $product->stock > 0 ? 'En stock' : 'Rupture' }}
+                                </span>
+                            </div>
+                            
+                            <div class="d-grid gap-2">
+                                <a href="{{ route('products.show', $product) }}" class="btn btn-primary">
+                                    <i class="fas fa-eye me-1"></i>Voir
+                                </a>
+                                
+                                @if($product->stock > 0)
+                                    <form action="{{ route('cart.add', $product->id) }}" method="POST">
+                                        @csrf
+                                        <input type="hidden" name="quantity" value="1">
+                                        <button type="submit" class="btn btn-success w-100">
+                                            <i class="fas fa-cart-plus me-1"></i>Panier
+                                        </button>
+                                    </form>
+                                @endif
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        @empty
+            <div class="col-12">
+                <div class="text-center py-5">
+                    <i class="fas fa-search fa-3x text-muted mb-3"></i>
+                    <h4 class="text-muted">Aucun produit trouvé</h4>
+                    <p class="text-muted">Essayez de modifier vos critères de recherche</p>
+                    <a href="{{ route('products.index') }}" class="btn btn-primary">Voir tous les produits</a>
+                </div>
+            </div>
+        @endforelse
+    </div>
+
+    <!-- Pagination -->
+    @if($products->hasPages())
+        <div class="row mt-4">
+            <div class="col-12">
+                <nav aria-label="Navigation des produits">
+                    {{ $products->links() }}
+                </nav>
+            </div>
+        </div>
+    @endif
+</div>
+
+<style>
+.hover-shadow:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 25px rgba(0,0,0,0.15) !important;
+    transition: all 0.3s ease;
+}
+
+.card {
+    transition: all 0.3s ease;
+}
+</style>
+@endsection 
