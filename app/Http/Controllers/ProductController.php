@@ -65,7 +65,16 @@ class ProductController extends Controller
     public function show($id)
     {
         $product = Product::findOrFail($id);
-        return view('products.show', compact('product'));
+        
+        // Récupérer les produits similaires (même catégorie, excluant le produit actuel)
+        $similarProducts = Product::where('category_id', $product->category_id)
+            ->where('id', '!=', $product->id)
+            ->where('stock', '>', 0)
+            ->latest()
+            ->take(4)
+            ->get();
+        
+        return view('products.show', compact('product', 'similarProducts'));
     }
 
     /**

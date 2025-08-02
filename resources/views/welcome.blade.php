@@ -19,10 +19,9 @@
                         <i class="fas fa-search me-2"></i>Découvrir nos produits
                     </a>
                     @guest
-                        <a href="{{ route('login') }}" class="btn btn-outline-light btn-lg px-4 py-3">
-                            <i class="fas fa-sign-in-alt me-2"></i>Se connecter
+                        <a href="{{ route('register.with.role') }}" class="btn btn-success btn-lg px-4 py-3">
+                            <i class="fas fa-user-plus me-2"></i>S'inscrire
                         </a>
-                    @else
                         <a href="#" class="btn btn-outline-light btn-lg px-4 py-3" onclick="document.getElementById('chatbot-toggle').click(); return false;">
                             <i class="fas fa-robot me-2"></i>Parler à l'assistant
                         </a>

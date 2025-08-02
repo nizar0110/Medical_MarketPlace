@@ -52,7 +52,7 @@
                 </div>
             </div>
 
-            @if($product->stock > 0)
+            @if($product->stock > 0 && (!auth()->check() || auth()->user()->id !== $product->seller_id))
                 <form action="{{ route('cart.add', $product->id) }}" method="POST" class="mb-4">
                     @csrf
                     <div class="row align-items-end">
@@ -71,6 +71,24 @@
                         </div>
                     </div>
                 </form>
+            @elseif($product->stock > 0 && auth()->check() && auth()->user()->id === $product->seller_id)
+                <div class="alert alert-info mb-4">
+                    <i class="fas fa-info-circle me-2"></i>
+                    <strong>Votre produit :</strong> Vous ne pouvez pas ajouter votre propre produit au panier.
+                    <div class="mt-2">
+                        <a href="{{ route('products.edit', $product) }}" class="btn btn-outline-primary btn-sm me-2">
+                            <i class="fas fa-edit me-1"></i>Modifier
+                        </a>
+                        <a href="{{ route('products.index') }}" class="btn btn-outline-secondary btn-sm">
+                            <i class="fas fa-list me-1"></i>Voir tous mes produits
+                        </a>
+                    </div>
+                </div>
+            @elseif($product->stock <= 0)
+                <div class="alert alert-warning mb-4">
+                    <i class="fas fa-exclamation-triangle me-2"></i>
+                    <strong>Rupture de stock :</strong> Ce produit n'est plus disponible pour le moment.
+                </div>
             @endif
 
             <!-- Actions supplémentaires -->
@@ -114,7 +132,8 @@
     <div class="mt-5">
         <h3 class="h4 fw-bold mb-4">Produits similaires</h3>
         <div class="row g-4">
-            @foreach($products->take(4) as $similarProduct)
+            @if(isset($similarProducts) && $similarProducts->count() > 0)
+                @foreach($similarProducts->take(4) as $similarProduct)
                 <div class="col-lg-3 col-md-4 col-sm-6">
                     <div class="card h-100 shadow-sm">
                         @if($similarProduct->image)
@@ -132,7 +151,15 @@
                         </div>
                     </div>
                 </div>
-            @endforeach
+                @endforeach
+            @else
+                <div class="col-12">
+                    <div class="text-center py-4">
+                        <i class="fas fa-box-open fa-3x text-muted mb-3"></i>
+                        <p class="text-muted">Aucun produit similaire disponible pour le moment.</p>
+                    </div>
+                </div>
+            @endif
         </div>
     </div>
 </div>

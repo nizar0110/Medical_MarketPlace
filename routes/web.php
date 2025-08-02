@@ -42,11 +42,32 @@ Route::middleware('auth')->group(function () {
     // Routes pour les tableaux de bord
     Route::get('/seller/dashboard', function () {
         $user = auth()->user();
+        
+        // Produits récents
         $recentProducts = $user->products()->latest()->take(5)->get();
         $productsCount = $user->products()->count();
-        $ordersCount = 0; // À adapter si tu veux afficher les vraies commandes
-        $revenue = 0; // À adapter si tu veux afficher le vrai chiffre d'affaires
-        return view('seller.dashboard', compact('recentProducts', 'productsCount', 'ordersCount', 'revenue'));
+        
+        // Calcul des revenus et commandes (à adapter selon votre logique métier)
+        $ordersCount = 0; // Placeholder - à remplacer par la vraie logique
+        $revenue = 0; // Placeholder - à remplacer par la vraie logique
+        $monthlyRevenue = 0; // Placeholder - à remplacer par la vraie logique
+        $recentOrders = []; // Placeholder - à remplacer par la vraie logique
+        
+        // Exemple de calcul des revenus (à adapter)
+        // $revenue = $user->products()->with('orderItems')->get()->sum(function($product) {
+        //     return $product->orderItems->sum(function($item) {
+        //         return $item->quantity * $item->price;
+        //     });
+        // });
+        
+        return view('seller.dashboard', compact(
+            'recentProducts', 
+            'productsCount', 
+            'ordersCount', 
+            'revenue', 
+            'monthlyRevenue',
+            'recentOrders'
+        ));
     })->name('seller.dashboard')->middleware('role:seller');
     
     Route::get('/client/dashboard', function () {
