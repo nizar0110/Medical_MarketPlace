@@ -30,8 +30,8 @@
                         @foreach($cartItems as $item)
                             <div class="row align-items-center border-bottom pb-3 mb-3">
                                 <div class="col-md-2">
-                                    @if($item->product->image)
-                                        <img src="{{ asset('storage/' . $item->product->image) }}" class="img-fluid rounded" alt="{{ $item->product->name }}">
+                                    @if($item['product']->image)
+                                        <img src="{{ asset('storage/' . $item['product']->image) }}" class="img-fluid rounded" alt="{{ $item['product']->name }}">
                                     @else
                                         <div class="bg-light rounded d-flex align-items-center justify-content-center" style="height: 80px;">
                                             <i class="fas fa-image text-muted"></i>
@@ -40,28 +40,28 @@
                                 </div>
                                 
                                 <div class="col-md-4">
-                                    <h6 class="fw-bold mb-1">{{ $item->product->name }}</h6>
-                                    <p class="text-muted small mb-0">{{ Str::limit($item->product->description, 50) }}</p>
+                                    <h6 class="fw-bold mb-1">{{ $item['product']->name }}</h6>
+                                    <p class="text-muted small mb-0">{{ Str::limit($item['product']->description, 50) }}</p>
                                 </div>
                                 
                                 <div class="col-md-2">
-                                    <span class="text-primary fw-bold">{{ number_format($item->product->price, 2) }} DH</span>
+                                    <span class="text-primary fw-bold">{{ number_format($item['product']->price, 2) }} DH</span>
                                 </div>
                                 
                                 <div class="col-md-2">
                                     <div class="input-group input-group-sm">
-                                        <button class="btn btn-outline-secondary" type="button" onclick="updateQuantity({{ $item->product->id }}, -1)">-</button>
-                                        <input type="number" class="form-control text-center" value="{{ $item->quantity }}" min="1" max="{{ $item->product->stock }}" onchange="updateQuantity({{ $item->product->id }}, 0, this.value)">
-                                        <button class="btn btn-outline-secondary" type="button" onclick="updateQuantity({{ $item->product->id }}, 1)">+</button>
+                                        <button class="btn btn-outline-secondary" type="button" onclick="updateQuantity({{ $item['product']->id }}, -1)">-</button>
+                                        <input type="number" class="form-control text-center" value="{{ $item['quantity'] }}" min="1" max="{{ $item['product']->stock }}" onchange="updateQuantity({{ $item['product']->id }}, 0, this.value)">
+                                        <button class="btn btn-outline-secondary" type="button" onclick="updateQuantity({{ $item['product']->id }}, 1)">+</button>
                                     </div>
                                 </div>
                                 
                                 <div class="col-md-1">
-                                    <span class="fw-bold">{{ number_format($item->product->price * $item->quantity, 2) }} DH</span>
+                                    <span class="fw-bold">{{ number_format($item['product']->price * $item['quantity'], 2) }} DH</span>
                                 </div>
                                 
                                 <div class="col-md-1">
-                                    <form action="{{ route('cart.remove', $item->product->id) }}" method="POST" class="d-inline">
+                                    <form action="{{ route('cart.remove', $item['product']->id) }}" method="POST" class="d-inline">
                                         @csrf
                                         @method('DELETE')
                                         <button type="submit" class="btn btn-outline-danger btn-sm" onclick="return confirm('Supprimer ce produit du panier ?')">
@@ -84,20 +84,13 @@
                     <div class="card-body">
                         <div class="d-flex justify-content-between mb-2">
                             <span>Sous-total :</span>
-                            <span>{{ number_format($subtotal, 2) }} DH</span>
+                            <span>{{ number_format($total, 2) }} DH</span>
                         </div>
                         
                         <div class="d-flex justify-content-between mb-2">
                             <span>Livraison :</span>
-                            <span>{{ $deliveryCost > 0 ? number_format($deliveryCost, 2) . ' DH' : 'Gratuit' }}</span>
+                            <span>Gratuit</span>
                         </div>
-                        
-                        @if($deliveryCost > 0)
-                            <div class="alert alert-info small">
-                                <i class="fas fa-info-circle me-1"></i>
-                                Livraison gratuite à partir de 1000 DH
-                            </div>
-                        @endif
                         
                         <hr>
                         
@@ -115,9 +108,9 @@
                         </div>
                         
                         <div class="d-grid gap-2">
-                            <button class="btn btn-primary btn-lg">
+                            <a href="{{ route('payment.checkout') }}" class="btn btn-primary btn-lg">
                                 <i class="fas fa-credit-card me-2"></i>Procéder au paiement
-                            </button>
+                            </a>
                             <a href="{{ route('products.index') }}" class="btn btn-outline-secondary">
                                 <i class="fas fa-arrow-left me-2"></i>Continuer les achats
                             </a>

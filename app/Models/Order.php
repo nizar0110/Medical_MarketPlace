@@ -7,6 +7,20 @@ use Illuminate\Database\Eloquent\Model;
 class Order extends Model
 {
     /**
+     * Les attributs qui peuvent être assignés en masse.
+     */
+    protected $fillable = [
+        'client_id',
+        'status',
+        'total',
+        'payment_status',
+        'shipping_address',
+        'shipping_phone',
+        'payment_method',
+        'order_number'
+    ];
+
+    /**
      * La commande appartient à un client
      */
     public function client()

@@ -1,69 +1,99 @@
-<x-app-layout>
-    <x-slot name="header">
-        <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-            {{ __('Ajouter un produit') }}
-        </h2>
-    </x-slot>
+@extends('layouts.app')
 
-    <div class="py-12">
-        <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
-            <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
-                <div class="p-6 text-gray-900">
+@section('content')
+<div class="container py-4">
+    <div class="row justify-content-center">
+        <div class="col-lg-8">
+            <div class="card shadow">
+                <div class="card-header bg-primary text-white">
+                    <h3 class="card-title mb-0">
+                        <i class="fas fa-plus-circle me-2"></i>Ajouter un produit
+                    </h3>
+                </div>
+                <div class="card-body">
                     <form action="{{ route('products.store') }}" method="POST" enctype="multipart/form-data">
                         @csrf
-                        <div class="mb-4">
-                            <label for="name" class="block text-sm font-medium text-gray-700">Nom</label>
-                            <input type="text" class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500" id="name" name="name" value="{{ old('name') }}" required>
+                        
+                        <!-- Name -->
+                        <div class="mb-3">
+                            <label for="name" class="form-label fw-bold">Nom du produit</label>
+                            <input type="text" class="form-control @error('name') is-invalid @enderror" id="name" name="name" value="{{ old('name') }}" placeholder="Ex: Masque chirurgical N95" required>
                             @error('name')
-                                <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
+                                <div class="invalid-feedback">{{ $message }}</div>
                             @enderror
                         </div>
-                        <div class="mb-4">
-                            <label for="description" class="block text-sm font-medium text-gray-700">Description</label>
-                            <textarea class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500" id="description" name="description" rows="3" required>{{ old('description') }}</textarea>
+
+                        <!-- Description -->
+                        <div class="mb-3">
+                            <label for="description" class="form-label fw-bold">Description</label>
+                            <textarea class="form-control @error('description') is-invalid @enderror" id="description" name="description" rows="4" placeholder="Décrivez votre produit en détail..." required>{{ old('description') }}</textarea>
                             @error('description')
-                                <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
+                                <div class="invalid-feedback">{{ $message }}</div>
                             @enderror
                         </div>
+
+                        <!-- Category Selection -->
                         <div class="mb-4">
-                            <label for="price" class="block text-sm font-medium text-gray-700">Prix (€)</label>
-                            <input type="number" step="0.01" class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500" id="price" name="price" value="{{ old('price') }}" required>
-                            @error('price')
-                                <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
-                            @enderror
-                        </div>
-                        <div class="mb-4">
-                            <label for="category_id" class="block text-sm font-medium text-gray-700">Catégorie</label>
-                            <select class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500" id="category_id" name="category_id" required>
-                                <option value="">Sélectionner une catégorie</option>
+                            <label class="form-label fw-bold">Catégorie</label>
+                            <div class="row g-3">
                                 @foreach($categories as $category)
-                                    <option value="{{ $category->id }}" {{ old('category_id') == $category->id ? 'selected' : '' }}>{{ $category->name }}</option>
+                                    <div class="col-md-6">
+                                        <div class="form-check h-100">
+                                            <input class="form-check-input" type="radio" name="category_id" value="{{ $category->id }}" id="category-{{ $category->id }}" {{ old('category_id') == $category->id ? 'checked' : '' }} required>
+                                            <label class="form-check-label h-100 d-flex flex-column justify-content-center p-3 border rounded" for="category-{{ $category->id }}">
+                                                <div class="text-center">
+                                                    <i class="fas fa-tag fa-2x text-primary mb-2"></i>
+                                                    <div class="fw-bold">{{ $category->name }}</div>
+                                                    <small class="text-muted">{{ $category->description ?? 'Produits de cette catégorie' }}</small>
+                                                </div>
+                                            </label>
+                                        </div>
+                                    </div>
                                 @endforeach
-                            </select>
+                            </div>
                             @error('category_id')
-                                <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
+                                <div class="text-danger small mt-2">{{ $message }}</div>
                             @enderror
                         </div>
-                        <div class="mb-4">
-                            <label for="stock" class="block text-sm font-medium text-gray-700">Stock</label>
-                            <input type="number" class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500" id="stock" name="stock" value="{{ old('stock', 0) }}" required>
-                            @error('stock')
-                                <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
-                            @enderror
+
+                        <!-- Price and Stock -->
+                        <div class="row mb-3">
+                            <div class="col-md-6">
+                                <label for="price" class="form-label fw-bold">Prix (DH)</label>
+                                <div class="input-group">
+                                    <input type="number" step="0.01" class="form-control @error('price') is-invalid @enderror" id="price" name="price" value="{{ old('price') }}" placeholder="0.00" required>
+                                    <span class="input-group-text">DH</span>
+                                </div>
+                                @error('price')
+                                    <div class="invalid-feedback">{{ $message }}</div>
+                                @enderror
+                            </div>
+                            <div class="col-md-6">
+                                <label for="stock" class="form-label fw-bold">Stock disponible</label>
+                                <input type="number" class="form-control @error('stock') is-invalid @enderror" id="stock" name="stock" value="{{ old('stock', 0) }}" placeholder="0" required>
+                                @error('stock')
+                                    <div class="invalid-feedback">{{ $message }}</div>
+                                @enderror
+                            </div>
                         </div>
+
+                        <!-- Image Upload -->
                         <div class="mb-4">
-                            <label for="image" class="block text-sm font-medium text-gray-700">Image</label>
-                            <input class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500" type="file" id="image" name="image" accept="image/*">
+                            <label for="image" class="form-label fw-bold">Image du produit</label>
+                            <input class="form-control @error('image') is-invalid @enderror" type="file" id="image" name="image" accept="image/*">
+                            <div class="form-text">Formats acceptés: JPEG, PNG, JPG, GIF, SVG (max 2MB)</div>
                             @error('image')
-                                <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
+                                <div class="invalid-feedback">{{ $message }}</div>
                             @enderror
                         </div>
-                        <div class="flex space-x-4">
-                            <button type="submit" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
-                                Créer
+
+                        <!-- Submit Buttons -->
+                        <div class="d-flex gap-2">
+                            <button type="submit" class="btn btn-primary">
+                                <i class="fas fa-save me-1"></i>Créer le produit
                             </button>
-                            <a href="{{ route('products.index') }}" class="bg-gray-500 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded">
-                                Annuler
+                            <a href="{{ route('products.index') }}" class="btn btn-outline-secondary">
+                                <i class="fas fa-times me-1"></i>Annuler
                             </a>
                         </div>
                     </form>
@@ -71,4 +101,22 @@
             </div>
         </div>
     </div>
-</x-app-layout> 
+</div>
+
+<style>
+.form-check-input:checked + .form-check-label {
+    border-color: #0d6efd !important;
+    background-color: #f8f9ff !important;
+}
+
+.form-check-label {
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.form-check-label:hover {
+    border-color: #0d6efd !important;
+    background-color: #f8f9ff !important;
+}
+</style>
+@endsection 

@@ -20,19 +20,59 @@
     <!-- Filtres et tri -->
     <div class="row mb-4">
         <div class="col-12">
+            <div class="card">
+                <div class="card-body">
+                    <form action="{{ route('products.index') }}" method="GET" class="row g-3">
+                        <!-- Search -->
+                        <div class="col-md-4">
+                            <input type="text" name="search" value="{{ request('search') }}" placeholder="Rechercher un produit..." class="form-control">
+                        </div>
+                        
+                        <!-- Category Filter -->
+                        <div class="col-md-3">
+                            <select name="category" class="form-select">
+                                <option value="">Toutes les catégories</option>
+                                @foreach($categories as $category)
+                                    <option value="{{ $category->id }}" {{ request('category') == $category->id ? 'selected' : '' }}>
+                                        {{ $category->name }}
+                                    </option>
+                                @endforeach
+                            </select>
+                        </div>
+                        
+                        <!-- Sort -->
+                        <div class="col-md-3">
+                            <select name="sort" class="form-select">
+                                <option value="">Trier par</option>
+                                <option value="price_asc" {{ request('sort') == 'price_asc' ? 'selected' : '' }}>Prix croissant</option>
+                                <option value="price_desc" {{ request('sort') == 'price_desc' ? 'selected' : '' }}>Prix décroissant</option>
+                                <option value="name_asc" {{ request('sort') == 'name_asc' ? 'selected' : '' }}>Nom A-Z</option>
+                                <option value="name_desc" {{ request('sort') == 'name_desc' ? 'selected' : '' }}>Nom Z-A</option>
+                            </select>
+                        </div>
+                        
+                        <!-- Submit -->
+                        <div class="col-md-2">
+                            <button type="submit" class="btn btn-primary w-100">
+                                <i class="fas fa-filter me-1"></i>Filtrer
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Results count -->
+    <div class="row mb-4">
+        <div class="col-12">
             <div class="d-flex justify-content-between align-items-center">
-                <div class="d-flex gap-2">
-                    <span class="text-muted">{{ $products->total() }} produits trouvés</span>
-                </div>
-                <div class="d-flex gap-2">
-                    <select class="form-select form-select-sm" style="width: auto;">
-                        <option>Trier par</option>
-                        <option>Prix croissant</option>
-                        <option>Prix décroissant</option>
-                        <option>Nom A-Z</option>
-                        <option>Nom Z-A</option>
-                    </select>
-                </div>
+                <span class="text-muted">{{ $products->total() }} produits trouvés</span>
+                @if(request('category') || request('search') || request('sort'))
+                    <a href="{{ route('products.index') }}" class="btn btn-outline-secondary btn-sm">
+                        <i class="fas fa-times me-1"></i>Effacer les filtres
+                    </a>
+                @endif
             </div>
         </div>
     </div>
@@ -51,6 +91,11 @@
                     @endif
                     
                     <div class="card-body d-flex flex-column">
+                        <!-- Category badge -->
+                        @if($product->category)
+                            <span class="badge bg-info mb-2">{{ $product->category->name }}</span>
+                        @endif
+                        
                         <h5 class="card-title fw-bold">{{ $product->name }}</h5>
                         <p class="card-text text-muted small">{{ Str::limit($product->description, 80) }}</p>
                         
@@ -68,13 +113,17 @@
                                 </a>
                                 
                                 @if($product->stock > 0)
-                                    <form action="{{ route('cart.add', $product->id) }}" method="POST">
-                                        @csrf
-                                        <input type="hidden" name="quantity" value="1">
-                                        <button type="submit" class="btn btn-success w-100">
-                                            <i class="fas fa-cart-plus me-1"></i>Panier
-                                        </button>
-                                    </form>
+                                    @auth
+                                        @if(Auth::user()->role === 'client')
+                                            <form action="{{ route('cart.add', $product->id) }}" method="POST">
+                                                @csrf
+                                                <input type="hidden" name="quantity" value="1">
+                                                <button type="submit" class="btn btn-success w-100">
+                                                    <i class="fas fa-cart-plus me-1"></i>Panier
+                                                </button>
+                                            </form>
+                                        @endif
+                                    @endauth
                                 @endif
                             </div>
                         </div>

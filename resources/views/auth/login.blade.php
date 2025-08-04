@@ -1,52 +1,72 @@
-<x-guest-layout>
-    <!-- Session Status -->
-    <x-auth-session-status class="mb-4" :status="session('status')" />
+@extends('layouts.guest')
 
-    <form method="POST" action="{{ route('login') }}">
-        @csrf
+@section('content')
+<div class="container d-flex justify-content-center align-items-center min-vh-100">
+    <div class="card shadow p-4" style="width: 100%; max-width: 400px;">
+        <h3 class="text-center mb-4">Sign In</h3>
 
-        <!-- Email Address -->
-        <div>
-            <x-input-label for="email" :value="__('Email')" />
-            <x-text-input id="email" class="block mt-1 w-full" type="email" name="email" :value="old('email')" required autofocus autocomplete="username" />
-            <x-input-error :messages="$errors->get('email')" class="mt-2" />
-        </div>
+        <!-- Session Status -->
+        @if (session('status'))
+            <div class="alert alert-success">{{ session('status') }}</div>
+        @endif
 
-        <!-- Password -->
-        <div class="mt-4">
-            <x-input-label for="password" :value="__('Password')" />
+        <form method="POST" action="{{ route('login') }}">
+            @csrf
 
-            <x-text-input id="password" class="block mt-1 w-full"
-                            type="password"
-                            name="password"
-                            required autocomplete="current-password" />
+            <!-- Email -->
+            <div class="mb-3">
+                <input
+                    type="email"
+                    name="email"
+                    class="form-control @error('email') is-invalid @enderror"
+                    placeholder="Email"
+                    value="{{ old('email') }}"
+                    required
+                    autofocus
+                >
+                @error('email')
+                    <div class="invalid-feedback">{{ $message }}</div>
+                @enderror
+            </div>
 
-            <x-input-error :messages="$errors->get('password')" class="mt-2" />
-        </div>
+            <!-- Password -->
+            <div class="mb-3">
+                <input
+                    type="password"
+                    name="password"
+                    class="form-control @error('password') is-invalid @enderror"
+                    placeholder="Password"
+                    required
+                >
+                @error('password')
+                    <div class="invalid-feedback">{{ $message }}</div>
+                @enderror
+            </div>
 
-        <!-- Remember Me -->
-        <div class="block mt-4">
-            <label for="remember_me" class="inline-flex items-center">
-                <input id="remember_me" type="checkbox" class="rounded border-gray-300 text-indigo-600 shadow-sm focus:ring-indigo-500" name="remember">
-                <span class="ms-2 text-sm text-gray-600">{{ __('Remember me') }}</span>
-            </label>
-        </div>
+            <!-- Remember Me -->
+            <div class="form-check mb-3">
+                <input class="form-check-input" type="checkbox" name="remember" id="remember_me">
+                <label class="form-check-label" for="remember_me">Remember me</label>
+            </div>
 
-        <div class="flex items-center justify-between mt-4">
-            <div class="flex flex-col space-y-2">
-                <a class="underline text-sm text-gray-600 hover:text-gray-900 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500" href="{{ route('register.with.role') }}">
-                    {{ __('Pas encore inscrit?') }}
-                </a>
+            <!-- Submit -->
+            <div class="d-grid mb-2">
+                <button type="submit" class="btn btn-primary">Sign In</button>
+            </div>
+
+            <!-- Forgot Password -->
+            <div class="text-center">
                 @if (Route::has('password.request'))
-                    <a class="underline text-sm text-gray-600 hover:text-gray-900 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500" href="{{ route('password.request') }}">
-                        {{ __('Mot de passe oublié?') }}
-                    </a>
+                    <a href="{{ route('password.request') }}" class="text-decoration-none">Forgot password?</a>
                 @endif
             </div>
 
-            <x-primary-button class="ms-3">
-                {{ __('Se connecter') }}
-            </x-primary-button>
-        </div>
-    </form>
-</x-guest-layout>
+            <!-- Register -->
+            <div class="text-center mt-3">
+                <span>Don't have an account?</span>
+                <a href="{{ route('register') }}" class="text-decoration-none">Register</a>
+            </div>
+        </form>
+    </div>
+</div>
+@endsection

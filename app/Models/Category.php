@@ -10,7 +10,8 @@ class Category extends Model
      * Les attributs qui peuvent être assignés en masse.
      */
     protected $fillable = [
-        'name'
+        'name',
+        'description'
     ];
 
     /**

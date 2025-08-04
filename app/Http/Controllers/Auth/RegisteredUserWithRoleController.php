@@ -38,24 +38,39 @@ class RegisteredUserWithRoleController extends Controller
             'password' => ['required', 'confirmed', Rules\Password::defaults()],
         ]);
 
-        $user = User::create([
-            'name' => $request->name,
-            'email' => $request->email,
-            'phone' => $request->phone,
-            'address' => $request->address,
-            'role' => $request->role,
-            'password' => Hash::make($request->password),
-        ]);
+        try {
+            $user = User::create([
+                'name' => $request->name,
+                'email' => $request->email,
+                'phone' => $request->phone,
+                'address' => $request->address,
+                'role' => $request->role,
+                'password' => Hash::make($request->password),
+            ]);
 
-        event(new Registered($user));
+            // Debug: Log the user creation
+            \Log::info('User registered successfully', [
+                'user_id' => $user->id,
+                'user_email' => $user->email,
+                'user_role' => $user->role
+            ]);
 
-        Auth::login($user);
+            event(new Registered($user));
 
-        // Rediriger selon le rôle
-        if ($request->role === 'seller') {
-            return redirect()->route('seller.dashboard');
-        } else {
-            return redirect()->route('client.dashboard');
+            Auth::login($user);
+
+            // Rediriger selon le rôle
+            if ($request->role === 'seller') {
+                return redirect()->route('seller.dashboard');
+            } else {
+                return redirect()->route('client.dashboard');
+            }
+        } catch (\Exception $e) {
+            \Log::error('Registration failed', [
+                'email' => $request->email,
+                'error' => $e->getMessage()
+            ]);
+            throw $e;
         }
     }
 } 

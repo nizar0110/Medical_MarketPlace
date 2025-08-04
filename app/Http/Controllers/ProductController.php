@@ -15,14 +15,44 @@ class ProductController extends Controller
     {
         $query = \App\Models\Product::query();
 
+        // Search functionality
         if ($request->filled('search')) {
             $search = $request->input('search');
             $query->where('name', 'like', "%$search%")
                   ->orWhere('description', 'like', "%$search%");
         }
 
-        $products = $query->latest()->paginate(12);
-        return view('products.index', compact('products'));
+        // Category filter
+        if ($request->filled('category')) {
+            $query->where('category_id', $request->input('category'));
+        }
+
+        // Sort functionality
+        if ($request->filled('sort')) {
+            switch ($request->input('sort')) {
+                case 'price_asc':
+                    $query->orderBy('price', 'asc');
+                    break;
+                case 'price_desc':
+                    $query->orderBy('price', 'desc');
+                    break;
+                case 'name_asc':
+                    $query->orderBy('name', 'asc');
+                    break;
+                case 'name_desc':
+                    $query->orderBy('name', 'desc');
+                    break;
+                default:
+                    $query->latest();
+            }
+        } else {
+            $query->latest();
+        }
+
+        $products = $query->with('category')->paginate(12);
+        $categories = Category::all();
+
+        return view('products.index', compact('products', 'categories'));
     }
 
     /**

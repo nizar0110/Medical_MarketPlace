@@ -5,6 +5,7 @@ use App\Http\Controllers\ProductController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\CartController;
 use App\Http\Controllers\ChatbotController;
+use App\Http\Controllers\PaymentController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
@@ -32,12 +33,18 @@ Route::middleware('auth')->group(function () {
     // Routes pour les catégories
     Route::resource('categories', CategoryController::class);
     
-    // Routes pour le panier
-    Route::get('/cart', [CartController::class, 'index'])->name('cart.index');
-    Route::post('/cart/{product}', [CartController::class, 'add'])->name('cart.add');
-    Route::put('/cart/{item}', [CartController::class, 'update'])->name('cart.update');
-    Route::delete('/cart/{item}', [CartController::class, 'remove'])->name('cart.remove');
-    Route::delete('/cart', [CartController::class, 'clear'])->name('cart.clear');
+    // Routes pour le panier (clients seulement)
+    Route::get('/cart', [CartController::class, 'index'])->name('cart.index')->middleware('role:client');
+    Route::post('/cart/{product}', [CartController::class, 'add'])->name('cart.add')->middleware('role:client');
+    Route::put('/cart/{item}', [CartController::class, 'update'])->name('cart.update')->middleware('role:client');
+    Route::delete('/cart/{item}', [CartController::class, 'remove'])->name('cart.remove')->middleware('role:client');
+    Route::delete('/cart', [CartController::class, 'clear'])->name('cart.clear')->middleware('role:client');
+    
+    // Routes pour le paiement (clients seulement)
+    Route::get('/checkout', [PaymentController::class, 'checkout'])->name('payment.checkout')->middleware('role:client');
+    Route::post('/process-payment', [PaymentController::class, 'processPayment'])->name('payment.process')->middleware('role:client');
+    Route::get('/payment/success/{order}', [PaymentController::class, 'success'])->name('payment.success')->middleware('role:client');
+    Route::get('/payment/failure', [PaymentController::class, 'failure'])->name('payment.failure')->middleware('role:client');
     
     // Routes pour les tableaux de bord
     Route::get('/seller/dashboard', function () {
@@ -69,6 +76,15 @@ Route::middleware('auth')->group(function () {
             'recentOrders'
         ));
     })->name('seller.dashboard')->middleware('role:seller');
+    
+    // Route pour voir les produits par catégorie (vendeur)
+    Route::get('/seller/products/by-category/{category}', function ($categoryId) {
+        $user = auth()->user();
+        $category = \App\Models\Category::findOrFail($categoryId);
+        $products = $user->products()->where('category_id', $categoryId)->latest()->get();
+        
+        return view('seller.products-by-category', compact('products', 'category'));
+    })->name('seller.products.by-category')->middleware('role:seller');
     
     Route::get('/client/dashboard', function () {
         return view('client.dashboard');

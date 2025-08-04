@@ -1,3 +1,112 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+/* Ensure dropdowns stay within viewport */
+.dropdown-menu {
+    max-width: 100vw;
+    overflow-x: auto;
+}
+
+/* Responsive dropdown positioning for Bootstrap dropdowns */
+@media (max-width: 768px) {
+    .dropdown-menu {
+        position: fixed !important;
+        top: 60px !important;
+        left: 10px !important;
+        right: 10px !important;
+        width: auto !important;
+        max-width: calc(100vw - 20px) !important;
+    }
+}
+
+/* Ensure React dropdowns stay within viewport */
+.absolute.z-50 {
+    max-width: calc(100vw - 20px);
+    overflow-x: auto;
+}
+
+/* Responsive positioning for React dropdowns */
+@media (max-width: 768px) {
+    .absolute.z-50 {
+        position: fixed !important;
+        top: 60px !important;
+        left: 10px !important;
+        right: 10px !important;
+        width: auto !important;
+        max-width: calc(100vw - 20px) !important;
+    }
+}
+
+/* Professional Footer Styles */
+footer {
+    position: relative;
+    z-index: 10;
+}
+
+footer a:hover {
+    color: #fff !important;
+    text-decoration: underline !important;
+    transition: all 0.3s ease;
+}
+
+footer .fab:hover {
+    transform: scale(1.2);
+    transition: transform 0.3s ease;
+}
+
+/* Responsive footer */
+@media (max-width: 768px) {
+    footer .text-md-end {
+        text-align: center !important;
+        margin-top: 1rem;
+    }
+    
+    footer .col-lg-2 {
+        margin-bottom: 1.5rem;
+    }
+}
+
+/* Hover effects for footer links */
+footer .text-muted:hover {
+    color: #fff !important;
+    transition: color 0.3s ease;
+}
+
+/* Footer social media icons */
+footer .fab {
+    transition: all 0.3s ease;
+}
+
+footer .fab:hover {
+    transform: translateY(-2px);
+    color: #007bff !important;
+}
+
+/* Footer section animations */
+footer .col-lg-4,
+footer .col-lg-2,
+footer .col-md-6 {
+    transition: transform 0.3s ease;
+}
+
+footer .col-lg-4:hover,
+footer .col-lg-2:hover,
+footer .col-md-6:hover {
+    transform: translateY(-5px);
+}
+
+/* Footer contact info styling */
+footer .fa-map-marker-alt,
+footer .fa-phone,
+footer .fa-envelope,
+footer .fa-clock {
+    transition: color 0.3s ease;
+}
+
+footer .fa-map-marker-alt:hover,
+footer .fa-phone:hover,
+footer .fa-envelope:hover,
+footer .fa-clock:hover {
+    color: #007bff !important;
+}

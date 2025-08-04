@@ -36,31 +36,6 @@
                                     </a>
                                 </li>
                             @endif
-                            <!-- Dashboard direct dans la navbar -->
-                            <li class="nav-item">
-                                @if(Auth::user()->role === 'admin')
-                                    <a class="nav-link" href="{{ route('admin.dashboard') }}">
-                                        <i class="fas fa-tachometer-alt me-1"></i>Dashboard Admin
-                                    </a>
-                                @elseif(Auth::user()->role === 'seller')
-                                    <a class="nav-link" href="{{ route('seller.dashboard') }}">
-                                        <i class="fas fa-store me-1"></i>Dashboard Vendeur
-                                    </a>
-                                @elseif(Auth::user()->role === 'client')
-                                    <a class="nav-link" href="{{ route('client.dashboard') }}">
-                                        <i class="fas fa-user-circle me-1"></i>Dashboard Client
-                                    </a>
-                                @endif
-                            </li>
-                            <!-- Sign Out direct dans la navbar -->
-                            <li class="nav-item">
-                                <form method="POST" action="{{ route('logout') }}" class="d-inline">
-                                    @csrf
-                                    <button type="submit" class="nav-link btn btn-link" style="padding: 0;">
-                                        <i class="fas fa-sign-out-alt me-1"></i>Sign Out
-                                    </button>
-                                </form>
-                            </li>
                         @endauth
                         <li class="nav-item">
                             <a class="nav-link" href="#" onclick="document.getElementById('chatbot-toggle').click(); return false;">
@@ -68,19 +43,33 @@
                             </a>
                         </li>
                         @guest
-                            <li class="nav-item">
-                                <a class="nav-link btn btn-outline-primary px-3 ms-2" href="{{ route('login') }}" style="border-radius: 20px;">
-                                    <i class="fas fa-sign-in-alt me-1"></i>Connexion
+                            <!-- Dropdown menu pour login/register -->
+                            <li class="nav-item dropdown">
+                                <a class="nav-link dropdown-toggle btn btn-outline-primary px-3 ms-2" href="#" role="button" data-bs-toggle="dropdown" style="border-radius: 20px;">
+                                    <i class="fas fa-user me-1"></i>Connexion
                                 </a>
+                                <ul class="dropdown-menu dropdown-menu-end position-absolute" style="right: 0; left: auto; min-width: 200px;">
+                                    <li>
+                                        <a class="dropdown-item" href="{{ route('login') }}">
+                                            <i class="fas fa-sign-in-alt me-2"></i>Se connecter
+                                        </a>
+                                    </li>
+                                    <li><hr class="dropdown-divider"></li>
+                                    <li>
+                                        <a class="dropdown-item" href="{{ route('register') }}">
+                                            <i class="fas fa-user-plus me-2"></i>S'inscrire
+                                        </a>
+                                    </li>
+                                </ul>
                             </li>
                         @endguest
                     </ul>
                     @auth
-                        <div class="dropdown">
+                        <div class="dropdown position-relative">
                             <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">
                                 <i class="fas fa-user me-1"></i>
                             </a>
-                            <ul class="dropdown-menu">
+                            <ul class="dropdown-menu dropdown-menu-end position-absolute" style="right: 0; left: auto; min-width: 200px;">
                                 @if(Auth::user()->role === 'admin')
                                     <li><a class="dropdown-item" href="{{ route('admin.dashboard') }}">
                                         <i class="fas fa-tachometer-alt me-2"></i>Dashboard Admin
@@ -111,3 +100,23 @@
         </div>
     </div>
 </nav>
+
+<style>
+/* Ensure dropdowns stay within viewport */
+.dropdown-menu {
+    max-width: 100vw;
+    overflow-x: auto;
+}
+
+/* Responsive dropdown positioning */
+@media (max-width: 768px) {
+    .dropdown-menu {
+        position: fixed !important;
+        top: 60px !important;
+        left: 10px !important;
+        right: 10px !important;
+        width: auto !important;
+        max-width: calc(100vw - 20px) !important;
+    }
+}
+</style>

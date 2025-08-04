@@ -52,7 +52,7 @@
                 </div>
             </div>
 
-            @if($product->stock > 0 && (!auth()->check() || auth()->user()->id !== $product->seller_id))
+            @if($product->stock > 0 && auth()->check() && auth()->user()->role === 'client')
                 <form action="{{ route('cart.add', $product->id) }}" method="POST" class="mb-4">
                     @csrf
                     <div class="row align-items-end">
@@ -71,16 +71,18 @@
                         </div>
                     </div>
                 </form>
-            @elseif($product->stock > 0 && auth()->check() && auth()->user()->id === $product->seller_id)
+            @elseif($product->stock > 0 && auth()->check() && auth()->user()->role === 'seller')
                 <div class="alert alert-info mb-4">
                     <i class="fas fa-info-circle me-2"></i>
-                    <strong>Votre produit :</strong> Vous ne pouvez pas ajouter votre propre produit au panier.
+                    <strong>Accès vendeur :</strong> En tant que vendeur, vous ne pouvez pas ajouter de produits au panier.
                     <div class="mt-2">
-                        <a href="{{ route('products.edit', $product) }}" class="btn btn-outline-primary btn-sm me-2">
-                            <i class="fas fa-edit me-1"></i>Modifier
-                        </a>
+                        @if(auth()->user()->id === $product->seller_id)
+                            <a href="{{ route('products.edit', $product) }}" class="btn btn-outline-primary btn-sm me-2">
+                                <i class="fas fa-edit me-1"></i>Modifier
+                            </a>
+                        @endif
                         <a href="{{ route('products.index') }}" class="btn btn-outline-secondary btn-sm">
-                            <i class="fas fa-list me-1"></i>Voir tous mes produits
+                            <i class="fas fa-list me-1"></i>Voir tous les produits
                         </a>
                     </div>
                 </div>
@@ -88,6 +90,16 @@
                 <div class="alert alert-warning mb-4">
                     <i class="fas fa-exclamation-triangle me-2"></i>
                     <strong>Rupture de stock :</strong> Ce produit n'est plus disponible pour le moment.
+                </div>
+            @elseif(!auth()->check())
+                <div class="alert alert-info mb-4">
+                    <i class="fas fa-info-circle me-2"></i>
+                    <strong>Connexion requise :</strong> Vous devez être connecté pour ajouter des produits au panier.
+                    <div class="mt-2">
+                        <a href="{{ route('login') }}" class="btn btn-primary btn-sm">
+                            <i class="fas fa-sign-in-alt me-1"></i>Se connecter
+                        </a>
+                    </div>
                 </div>
             @endif
 
