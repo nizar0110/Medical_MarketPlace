@@ -43,6 +43,163 @@
         </main>
     </div>
 
+    <!-- Footer Professionnel -->
+    <footer class="bg-dark text-white">
+        <!-- Section principale du footer -->
+        <div class="container py-5">
+            <div class="row">
+                <!-- À propos de Medical Market -->
+                <div class="col-lg-4 col-md-6 mb-4">
+                    <h5 class="fw-bold mb-3">
+                        <i class="fas fa-heartbeat me-2 text-primary"></i>
+                        Medical Market
+                    </h5>
+                    <p class="text-white mb-3">
+                        Votre plateforme de confiance pour tous vos besoins médicaux. 
+                        Nous proposons une large gamme de produits médicaux de qualité 
+                        auprès de fournisseurs certifiés et agréés par le ministère de la santé.
+                    </p>
+                    <div class="mb-3">
+                        <span class="badge bg-success me-2">
+                            <i class="fas fa-certificate me-1"></i>Certifié ISO 13485
+                        </span>
+                        <span class="badge bg-info me-2">
+                            <i class="fas fa-shield-alt me-1"></i>Agréé Ministère Santé
+                        </span>
+                    </div>
+                    <div class="d-flex gap-3">
+                        <a href="https://facebook.com/medicalmarket" target="_blank" class="text-white text-decoration-none" title="Suivez-nous sur Facebook">
+                            <i class="fab fa-facebook-f fa-lg"></i>
+                        </a>
+                        <a href="https://twitter.com/medicalmarket" target="_blank" class="text-white text-decoration-none" title="Suivez-nous sur Twitter">
+                            <i class="fab fa-twitter fa-lg"></i>
+                        </a>
+                        <a href="https://linkedin.com/company/medicalmarket" target="_blank" class="text-white text-decoration-none" title="Suivez-nous sur LinkedIn">
+                            <i class="fab fa-linkedin-in fa-lg"></i>
+                        </a>
+                        <a href="https://instagram.com/medicalmarket" target="_blank" class="text-white text-decoration-none" title="Suivez-nous sur Instagram">
+                            <i class="fab fa-instagram fa-lg"></i>
+                        </a>
+                        <a href="https://youtube.com/medicalmarket" target="_blank" class="text-white text-decoration-none" title="Regardez nos vidéos">
+                            <i class="fab fa-youtube fa-lg"></i>
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Liens rapides -->
+                <div class="col-lg-2 col-md-6 mb-4">
+                    <h6 class="fw-bold mb-3">Liens Rapides</h6>
+                    <ul class="list-unstyled">
+                        <li class="mb-2">
+                            <a href="/" class="text-white text-decoration-none">
+                                <i class="fas fa-home me-2"></i>Accueil
+                            </a>
+                        </li>
+                        <li class="mb-2">
+                            <a href="/produits" class="text-white text-decoration-none">
+                                <i class="fas fa-pills me-2"></i>Catalogue Produits
+                            </a>
+                        </li>
+                        <li class="mb-2">
+                            <a href="/assistant" class="text-white text-decoration-none">
+                                <i class="fas fa-robot me-2"></i>Assistant IA
+                            </a>
+                        </li>
+                        <li class="mb-2">
+                            <a href="/categories" class="text-white text-decoration-none">
+                                <i class="fas fa-th-large me-2"></i>Catégories
+                            </a>
+                        </li>
+                       
+                      
+                    </ul>
+                </div>
+
+                <!-- Services -->
+                <div class="col-lg-2 col-md-6 mb-4">
+                    <h6 class="fw-bold mb-3">Services</h6>
+                    <ul class="list-unstyled">
+                        <li class="mb-2">
+                            <a href="/livraison" class="text-white text-decoration-none">
+                                <i class="fas fa-shipping-fast me-2"></i>Livraison Express
+                            </a>
+                        </li>
+                        <li class="mb-2">
+                            <a href="/garantie" class="text-white text-decoration-none">
+                                <i class="fas fa-shield-alt me-2"></i>Garantie 2 Ans
+                            </a>
+                        </li>
+                        <li class="mb-2">
+                            <a href="/retours" class="text-white text-decoration-none">
+                                <i class="fas fa-undo me-2"></i>Retours 30 Jours
+                            </a>
+                        </li>
+                        <li class="mb-2">
+                            <a href="/support" class="text-white text-decoration-none">
+                                <i class="fas fa-headset me-2"></i>Support 24/7
+                            </a>
+                        </li>
+                     
+                       
+                    </ul>
+                </div>
+
+                <!-- Contact -->
+                <div class="col-lg-4 col-md-6 mb-4">
+                    <h6 class="fw-bold mb-3">Contact & Informations</h6>
+                    <div class="mb-3">
+                        <i class="fas fa-map-marker-alt me-2 text-primary"></i>
+                        <span class="text-white">123 Rue de la Santé, Quartier Maarif, Casablanca 20000, Maroc</span>
+                    </div>
+                   
+                    <div class="mb-3">
+                        <i class="fas fa-mobile-alt me-2 text-primary"></i>
+                        <span class="text-white">+212 6 12 345 678</span>
+                    </div>
+                   
+                    <div class="mb-3">
+                        <i class="fas fa-envelope me-2 text-primary"></i>
+                        <span class="text-white">support@medicalmarket.ma</span>
+                    </div>
+                    <div class="mb-3">
+                        <i class="fas fa-clock me-2 text-primary"></i>
+                        <span class="text-white">Lun-Ven: 8h-18h, Sam: 9h-16h, Dim: Fermé</span>
+                    </div>
+                    <div class="mb-3">
+                        <i class="fas fa-globe me-2 text-primary"></i>
+                        <span class="text-white">www.medicalmarket.ma</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Section inférieure du footer -->
+        <div class="border-top border-secondary">
+            <div class="container py-3">
+                <div class="row align-items-center">
+                    <div class="col-md-6 text-center text-md-start">
+                        <p class="mb-0 text-white">
+                            © 2025 Medical Market SARL. Tous droits réservés. | RC: 123456 | ICE: 123456789 | CNSS: 123456789
+                        </p>
+                    </div>
+                    <div class="col-md-6 text-center text-md-end">
+                        <div class="d-flex justify-content-center justify-content-md-end gap-3">
+                            <a href="/politique-confidentialite" class="text-white text-decoration-none small">
+                                Politique de confidentialité
+                            </a>
+                            <a href="/conditions-utilisation" class="text-white text-decoration-none small">
+                                Conditions d'utilisation
+                            </a>
+                            <a href="/mentions-legales" class="text-white text-decoration-none small">
+                                Mentions légales
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </footer>
+
     <!-- Widget Chatbot Flottant -->
     <div id="chatbot-widget" class="position-fixed bottom-0 end-0 p-3" style="z-index: 1050;">
         <button id="chatbot-toggle" class="btn btn-primary rounded-circle p-3 shadow">

@@ -37,12 +37,4 @@
             </div>
         @endforeach
     </div>
-@endsection
-
-@section('footer')
-    <footer class="bg-light text-center py-3 mt-5">
-        <div class="container">
-            <span class="text-muted">&copy; {{ date('Y') }} Medical Marketplace. Tous droits réservés.</span>
-        </div>
-    </footer>
 @endsection 
