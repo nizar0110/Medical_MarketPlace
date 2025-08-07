@@ -38,6 +38,35 @@ class DatabaseSeeder extends Seeder
             'role' => 'client'
         ]);
 
+        // Créer des utilisateurs ERP avec rôles étendus
+        $warehouseManager = User::create([
+            'name' => 'Gestionnaire Entrepôt',
+            'email' => 'warehouse@medical.com',
+            'password' => bcrypt('password'),
+            'role' => 'warehouse_manager'
+        ]);
+
+        $accountant = User::create([
+            'name' => 'Comptable',
+            'email' => 'accountant@medical.com',
+            'password' => bcrypt('password'),
+            'role' => 'accountant'
+        ]);
+
+        $buyer = User::create([
+            'name' => 'Acheteur',
+            'email' => 'buyer@medical.com',
+            'password' => bcrypt('password'),
+            'role' => 'buyer'
+        ]);
+
+        $salesManager = User::create([
+            'name' => 'Responsable Commercial',
+            'email' => 'sales@medical.com',
+            'password' => bcrypt('password'),
+            'role' => 'sales_manager'
+        ]);
+
         // Créer des catégories
         $categories = [
             ['name' => 'Équipements de diagnostic'],
@@ -106,5 +135,11 @@ class DatabaseSeeder extends Seeder
         foreach ($products as $productData) {
             Product::create($productData);
         }
+
+        // Exécuter les seeders ERP
+        $this->call([
+            ERPInventorySeeder::class,
+            ERPAccountingSeeder::class,
+        ]);
     }
 }

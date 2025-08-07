@@ -83,6 +83,13 @@
                                         <i class="fas fa-user-circle me-2"></i>Dashboard Client
                                     </a></li>
                                 @endif
+                                
+                                @if(in_array(Auth::user()->role, ['warehouse_manager', 'accountant', 'buyer', 'sales_manager', 'admin']))
+                                    <li><hr class="dropdown-divider"></li>
+                                    <li><a class="dropdown-item" href="{{ route('erp.dashboard') }}">
+                                        <i class="fas fa-cogs me-2"></i>Accès ERP
+                                    </a></li>
+                                @endif
                                 <li><hr class="dropdown-divider"></li>
                                 <li>
                                     <form method="POST" action="{{ route('logout') }}" class="d-inline">

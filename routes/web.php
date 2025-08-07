@@ -93,6 +93,23 @@ Route::middleware('auth')->group(function () {
     Route::get('/admin/dashboard', function () {
         return view('admin.dashboard');
     })->name('admin.dashboard')->middleware('role:admin');
+    
+    // Routes ERP
+    Route::prefix('erp')->name('erp.')->middleware(['auth', 'verified', 'erp.role'])->group(function () {
+        Route::get('/', [\App\Http\Controllers\ERP\ERPController::class, 'index'])->name('index');
+        Route::get('/dashboard', [\App\Http\Controllers\ERP\ERPController::class, 'dashboard'])->name('dashboard');
+        
+        // Module Inventaire
+        Route::prefix('inventory')->name('inventory.')->middleware('erp.role:inventory')->group(function () {
+            Route::get('/dashboard', [\App\Http\Controllers\ERP\InventoryController::class, 'dashboard'])->name('dashboard');
+            Route::get('/warehouses', [\App\Http\Controllers\ERP\InventoryController::class, 'warehouses'])->name('warehouses.index');
+            Route::get('/warehouses/create', [\App\Http\Controllers\ERP\InventoryController::class, 'createWarehouse'])->name('warehouses.create');
+            Route::post('/warehouses', [\App\Http\Controllers\ERP\InventoryController::class, 'storeWarehouse'])->name('warehouses.store');
+            Route::get('/movements', [\App\Http\Controllers\ERP\InventoryController::class, 'movements'])->name('movements.index');
+            Route::get('/movements/create', [\App\Http\Controllers\ERP\InventoryController::class, 'createMovement'])->name('movements.create');
+            Route::post('/movements', [\App\Http\Controllers\ERP\InventoryController::class, 'storeMovement'])->name('movements.store');
+        });
+    });
 });
 
 require __DIR__.'/auth.php';
