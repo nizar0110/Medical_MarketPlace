@@ -17,8 +17,10 @@
     <!-- FontAwesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 
-    <!-- Scripts -->
+    <!-- Styles -->
     @vite(['resources/css/app.css', 'resources/js/app.js'])
+    <link href="{{ asset('css/admin-dashboard.css') }}" rel="stylesheet">
+    <link href="{{ asset('css/dashboard-icons.css') }}" rel="stylesheet">
 </head>
 <body class="font-sans antialiased">
     <div class="bg-gray-100">

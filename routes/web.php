@@ -6,6 +6,7 @@ use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\CartController;
 use App\Http\Controllers\ChatbotController;
 use App\Http\Controllers\PaymentController;
+use App\Http\Controllers\AdminController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
@@ -86,13 +87,62 @@ Route::middleware('auth')->group(function () {
         return view('seller.products-by-category', compact('products', 'category'));
     })->name('seller.products.by-category')->middleware('role:seller');
     
+    // Route pour créer un produit (vendeur)
+    Route::get('/seller/products/create', function () {
+        $categories = \App\Models\Category::all();
+        return view('seller.products.create', compact('categories'));
+    })->name('seller.products.create')->middleware('role:seller');
+    
+    // Route de démonstration des icônes du dashboard
+Route::get('/dashboard/icons-demo', function () {
+    return view('dashboard.icons-demo');
+})->name('dashboard.icons-demo');
+
+Route::post('/seller/products', function (\Illuminate\Http\Request $request) {
+        try {
+            $validated = $request->validate([
+                'name' => 'required|string|max:255',
+                'description' => 'required|string',
+                'price' => 'required|numeric|min:0',
+                'category_id' => 'required|exists:categories,id',
+                'stock' => 'required|integer|min:0',
+                'image' => 'required|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
+            ]);
+
+            if ($request->hasFile('image')) {
+                $path = $request->file('image')->store('products', 'public');
+                $validated['image'] = $path;
+            }
+
+            $validated['seller_id'] = auth()->id();
+            $product = \App\Models\Product::create($validated);
+
+            return response()->json([
+                'success' => true,
+                'message' => 'Produit créé avec succès',
+                'product' => $product
+            ]);
+        } catch (\Illuminate\Validation\ValidationException $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Erreur de validation',
+                'errors' => $e->errors()
+            ], 422);
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Une erreur est survenue: ' . $e->getMessage()
+            ], 500);
+        }
+    })->name('seller.products.store')->middleware('role:seller');
+    
     Route::get('/client/dashboard', function () {
         return view('client.dashboard');
     })->name('client.dashboard')->middleware('role:client');
     
-    Route::get('/admin/dashboard', function () {
-        return view('admin.dashboard');
-    })->name('admin.dashboard')->middleware('role:admin');
+    Route::get('/admin/dashboard', [AdminController::class, 'dashboard'])->name('admin.dashboard')->middleware('role:admin');
+    Route::post('/admin/dashboard/layout', [AdminController::class, 'updateDashboardLayout'])->name('admin.dashboard.layout')->middleware('role:admin');
+    Route::get('/admin/dashboard/statistics', [AdminController::class, 'getStatistics'])->name('admin.dashboard.statistics')->middleware('role:admin');
     
     // Routes ERP
     Route::prefix('erp')->name('erp.')->middleware(['auth', 'verified', 'erp.role'])->group(function () {
