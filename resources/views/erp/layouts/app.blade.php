@@ -99,17 +99,17 @@
                         @if(auth()->user()->role === 'accountant' || auth()->user()->role === 'admin')
                         <div class="mt-3">
                             <small class="text-white-50 text-uppercase">Comptabilité</small>
-                            <a class="nav-link" href="#">
+                            <a class="nav-link" href="{{ route('erp.accounting.dashboard') }}">
+                                <i class="fas fa-tachometer-alt"></i>
+                                Tableau de Bord
+                            </a>
+                            <a class="nav-link" href="{{ route('erp.accounting.chart_of_accounts') }}">
                                 <i class="fas fa-book"></i>
                                 Plan Comptable
                             </a>
-                            <a class="nav-link" href="#">
+                            <a class="nav-link" href="{{ route('erp.accounting.journal_entries') }}">
                                 <i class="fas fa-journal-whills"></i>
                                 Écritures
-                            </a>
-                            <a class="nav-link" href="#">
-                                <i class="fas fa-credit-card"></i>
-                                Paiements
                             </a>
                         </div>
                         @endif
@@ -117,11 +117,15 @@
                         @if(auth()->user()->role === 'buyer' || auth()->user()->role === 'admin')
                         <div class="mt-3">
                             <small class="text-white-50 text-uppercase">Achats</small>
-                            <a class="nav-link" href="#">
+                            <a class="nav-link" href="{{ route('erp.purchases.dashboard') }}">
+                                <i class="fas fa-tachometer-alt"></i>
+                                Tableau de Bord
+                            </a>
+                            <a class="nav-link" href="{{ route('erp.purchases.suppliers') }}">
                                 <i class="fas fa-truck"></i>
                                 Fournisseurs
                             </a>
-                            <a class="nav-link" href="#">
+                            <a class="nav-link" href="{{ route('erp.purchases.purchase_orders') }}">
                                 <i class="fas fa-shopping-cart"></i>
                                 Commandes
                             </a>
@@ -131,15 +135,19 @@
                         @if(auth()->user()->role === 'sales_manager' || auth()->user()->role === 'admin')
                         <div class="mt-3">
                             <small class="text-white-50 text-uppercase">Ventes</small>
-                            <a class="nav-link" href="#">
+                            <a class="nav-link" href="{{ route('erp.sales.dashboard') }}">
+                                <i class="fas fa-tachometer-alt"></i>
+                                Tableau de Bord
+                            </a>
+                            <a class="nav-link" href="{{ route('erp.sales.customers') }}">
                                 <i class="fas fa-users"></i>
                                 Clients
                             </a>
-                            <a class="nav-link" href="#">
+                            <a class="nav-link" href="{{ route('erp.sales.quotes') }}">
                                 <i class="fas fa-file-invoice"></i>
                                 Devis
                             </a>
-                            <a class="nav-link" href="#">
+                            <a class="nav-link" href="{{ route('erp.sales.invoices') }}">
                                 <i class="fas fa-receipt"></i>
                                 Factures
                             </a>

@@ -159,6 +159,28 @@ Route::post('/seller/products', function (\Illuminate\Http\Request $request) {
             Route::get('/movements/create', [\App\Http\Controllers\ERP\InventoryController::class, 'createMovement'])->name('movements.create');
             Route::post('/movements', [\App\Http\Controllers\ERP\InventoryController::class, 'storeMovement'])->name('movements.store');
         });
+        
+        // Module Comptabilité
+        Route::prefix('accounting')->name('accounting.')->middleware('erp.role:accounting')->group(function () {
+            Route::get('/dashboard', [\App\Http\Controllers\ERP\AccountingController::class, 'dashboard'])->name('dashboard');
+            Route::get('/chart-of-accounts', [\App\Http\Controllers\ERP\AccountingController::class, 'chartOfAccounts'])->name('chart_of_accounts');
+            Route::get('/journal-entries', [\App\Http\Controllers\ERP\AccountingController::class, 'journalEntries'])->name('journal_entries');
+        });
+        
+        // Module Achats
+        Route::prefix('purchases')->name('purchases.')->middleware('erp.role:purchases')->group(function () {
+            Route::get('/dashboard', [\App\Http\Controllers\ERP\PurchasesController::class, 'dashboard'])->name('dashboard');
+            Route::get('/suppliers', [\App\Http\Controllers\ERP\PurchasesController::class, 'suppliers'])->name('suppliers');
+            Route::get('/purchase-orders', [\App\Http\Controllers\ERP\PurchasesController::class, 'purchaseOrders'])->name('purchase_orders');
+        });
+        
+        // Module Ventes
+        Route::prefix('sales')->name('sales.')->middleware('erp.role:sales')->group(function () {
+            Route::get('/dashboard', [\App\Http\Controllers\ERP\SalesController::class, 'dashboard'])->name('dashboard');
+            Route::get('/customers', [\App\Http\Controllers\ERP\SalesController::class, 'customers'])->name('customers');
+            Route::get('/quotes', [\App\Http\Controllers\ERP\SalesController::class, 'quotes'])->name('quotes');
+            Route::get('/invoices', [\App\Http\Controllers\ERP\SalesController::class, 'invoices'])->name('invoices');
+        });
     });
 });
 

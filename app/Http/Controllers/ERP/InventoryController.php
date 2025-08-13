@@ -17,6 +17,7 @@ class InventoryController extends Controller
         
         // Statistiques inventaire
         $stats = [
+            'title' => 'Gestion des Stocks',
             'warehouses_count' => DB::table('erp_inventory_warehouses')->count(),
             'locations_count' => DB::table('erp_inventory_locations')->count(),
             'stock_movements_today' => DB::table('erp_inventory_stock_movements')
@@ -54,7 +55,9 @@ class InventoryController extends Controller
             ->orderBy('name')
             ->paginate(10);
             
-        return view('erp.inventory.warehouses.index', compact('warehouses'));
+        $stats = ['title' => 'Gestion des Entrepôts'];
+            
+        return view('erp.inventory.warehouses.index', compact('warehouses', 'stats'));
     }
     
     /**
@@ -62,7 +65,8 @@ class InventoryController extends Controller
      */
     public function createWarehouse()
     {
-        return view('erp.inventory.warehouses.create');
+        $stats = ['title' => 'Nouvel Entrepôt'];
+        return view('erp.inventory.warehouses.create', compact('stats'));
     }
     
     /**
@@ -110,7 +114,9 @@ class InventoryController extends Controller
             ->orderBy('erp_inventory_stock_movements.created_at', 'desc')
             ->paginate(15);
             
-        return view('erp.inventory.movements.index', compact('movements'));
+        $stats = ['title' => 'Mouvements de Stock'];
+            
+        return view('erp.inventory.movements.index', compact('movements', 'stats'));
     }
     
     /**
@@ -121,7 +127,9 @@ class InventoryController extends Controller
         $products = DB::table('products')->orderBy('name')->get();
         $warehouses = DB::table('erp_inventory_warehouses')->where('is_active', true)->get();
         
-        return view('erp.inventory.movements.create', compact('products', 'warehouses'));
+        $stats = ['title' => 'Nouveau Mouvement'];
+        
+        return view('erp.inventory.movements.create', compact('products', 'warehouses', 'stats'));
     }
     
     /**
