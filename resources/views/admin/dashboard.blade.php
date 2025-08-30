@@ -1,329 +1,55 @@
-<x-app-layout>
-    <x-slot name="header">
-        <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-            {{ __('Administration') }}
-        </h2>
-    </x-slot>
+@extends('layouts.app')
 
-    <div class="py-12">
-        <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
-            <!-- Sélecteur de période -->
-            <div class="mb-4 flex justify-between items-center bg-white p-4 rounded-lg shadow-sm">
-                <select id="period-selector" class="dashboard-action-button border border-gray-300 bg-white text-gray-700 hover:bg-gray-50">
-                    <option value="day">Aujourd'hui</option>
-                    <option value="week">Cette semaine</option>
-                    <option value="month" selected>Ce mois</option>
-                    <option value="year">Cette année</option>
-                </select>
+@section('content')
+<div class="container py-4">
+    <!-- En-tête -->
+    <div class="row mb-4">
+        <div class="col-12">
+            <h1 class="h2 fw-bold mb-2">Tableau de bord Administration</h1>
+            <p class="text-muted">Gérez votre plateforme et suivez les performances</p>
+        </div>
+    </div>
 
-                <div class="flex space-x-2">
-                    <button onclick="window.location.href='{{ route('admin.dashboard') }}'" class="dashboard-action-button bg-blue-500 hover:bg-blue-600 text-white">
-                        <i class="fas fa-sync-alt mr-1"></i> Actualiser
-                    </button>
-                    <button onclick="exportData()" class="dashboard-action-button bg-green-500 hover:bg-green-600 text-white">
-                        <i class="fas fa-download mr-1"></i> Exporter
-                    </button>
-                </div>
-            </div>
+    <!-- Messages de succès/erreur -->
+    @if(session('success'))
+        <div class="alert alert-success alert-dismissible fade show" role="alert">
+            <i class="fas fa-check-circle me-2"></i>
+            {{ session('success') }}
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    @endif
 
-            <!-- Statistiques générales -->
-            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-6 dashboard-grid">
-                <!-- Card Utilisateurs -->
-                <div class="bg-white overflow-hidden shadow-xl rounded-lg transition-transform duration-500 hover:scale-105">
-                    <div class="p-6">
-                        <div class="flex items-center">
-                            <div class="p-2 rounded-full bg-blue-100 bg-opacity-75">
-                                <svg class="h-5 w-5 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"></path>
-                                </svg>
-                            </div>
-                            <div class="ml-5 w-0 flex-1">
-                                <dl>
-                                    <dt class="text-sm font-medium text-gray-500 truncate">Utilisateurs</dt>
-                                    <dd id="stats-users" class="text-lg font-bold text-gray-900">{{ $usersCount ?? 0 }}</dd>
-                                    <dd class="text-sm text-gray-600">Total des utilisateurs</dd>
-                                </dl>
-                            </div>
-                        </div>
-                        <div class="mt-4">
-                            <a href="#" class="text-blue-600 hover:text-blue-800 text-sm font-medium flex items-center">
-                                Voir les détails
-                                <svg class="ml-1 w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
-                                </svg>
-                            </a>
-                        </div>
-                    </div>
-                </div>
+    @if(session('error'))
+        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+            <i class="fas fa-exclamation-triangle me-2"></i>
+            {{ session('error') }}
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    @endif
 
-                <!-- Card Produits -->
-                <div class="bg-white overflow-hidden shadow-xl rounded-lg transition-transform duration-500 hover:scale-105">
-                    <div class="p-6">
-                        <div class="flex items-center">
-                            <div class="p-2 rounded-full bg-green-100 bg-opacity-75">
-                                <svg class="h-5 w-5 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"></path>
-                                </svg>
-                            </div>
-                            <div class="ml-5 w-0 flex-1">
-                                <dl>
-                                    <dt class="text-sm font-medium text-gray-500 truncate">Produits</dt>
-                                    <dd id="stats-products" class="text-lg font-bold text-gray-900">{{ $productsCount ?? 0 }}</dd>
-                                    <dd class="text-sm text-gray-600">Catalogue total</dd>
-                                </dl>
-                            </div>
+    <!-- Sélecteur de période et actions -->
+    <div class="row mb-4">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <div class="d-flex align-items-center gap-3">
+                            <label for="period-selector" class="form-label mb-0 fw-bold">Période :</label>
+                            <select id="period-selector" class="form-select" style="width: auto;">
+                                <option value="day">Aujourd'hui</option>
+                                <option value="week">Cette semaine</option>
+                                <option value="month" selected>Ce mois</option>
+                                <option value="year">Cette année</option>
+                            </select>
                         </div>
-                        <div class="mt-4">
-                            <a href="{{ route('products.index') }}" class="text-green-600 hover:text-green-800 text-sm font-medium flex items-center">
-                                Gérer les produits
-                                <svg class="ml-1 w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
-                                </svg>
-                            </a>
-                        </div>
-                    </div>
-                </div>
 
-                <!-- Card Commandes -->
-                <div class="bg-white overflow-hidden shadow-xl rounded-lg transition-transform duration-500 hover:scale-105">
-                    <div class="p-6">
-                        <div class="flex items-center">
-                            <div class="p-2 rounded-full bg-yellow-100 bg-opacity-75">
-                                <svg class="h-5 w-5 text-yellow-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"></path>
-                                </svg>
-                            </div>
-                            <div class="ml-5 w-0 flex-1">
-                                <dl>
-                                    <dt class="text-sm font-medium text-gray-500 truncate">Commandes</dt>
-                                    <dd id="stats-orders" class="text-lg font-bold text-gray-900">{{ $ordersCount ?? 0 }}</dd>
-                                    <dd class="text-sm text-gray-600">Total des commandes</dd>
-                                </dl>
-                            </div>
-                        </div>
-                        <div class="mt-4">
-                            <a href="#" class="text-yellow-600 hover:text-yellow-800 text-sm font-medium flex items-center">
-                                Voir les commandes
-                                <svg class="ml-1 w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
-                                </svg>
-                            </a>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Card Revenus -->
-                <div class="bg-white overflow-hidden shadow-xl rounded-lg transition-transform duration-500 hover:scale-105">
-                    <div class="p-6">
-                        <div class="flex items-center">
-                            <div class="p-2 rounded-full bg-purple-100 bg-opacity-75">
-                                <svg class="h-5 w-5 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
-                                </svg>
-                            </div>
-                            <div class="ml-5 w-0 flex-1">
-                                <dl>
-                                    <dt class="text-sm font-medium text-gray-500 truncate">Revenus</dt>
-                                    <dd id="stats-revenue" class="text-lg font-bold text-gray-900">{{ number_format($revenue ?? 0, 2) }} €</dd>
-                                    <dd class="text-sm text-gray-600">Chiffre d'affaires total</dd>
-                                </dl>
-                            </div>
-                        </div>
-                        <div class="mt-4">
-                            <a href="#" class="text-purple-600 hover:text-purple-800 text-sm font-medium flex items-center">
-                                Voir les détails
-                                <svg class="ml-1 w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
-                                </svg>
-                            </a>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Actions rapides -->
-            <div class="bg-white overflow-hidden shadow-xl rounded-lg mb-8">
-                <div class="p-6">
-                    <h3 class="text-lg font-semibold text-gray-900 mb-6 flex items-center">
-                        <svg class="w-5 h-5 mr-2 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path>
-                        </svg>
-                        Actions rapides
-                    </h3>
-                    <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
-                        <a href="#" class="transform transition-all duration-300 hover:scale-105">
-                            <div class="flex items-center p-4 bg-blue-50 rounded-lg hover:bg-blue-100">
-                                <div class="p-2 rounded-full bg-blue-100">
-                                    <svg class="w-4 h-4 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"></path>
-                                    </svg>
-                                </div>
-                                <div class="ml-4">
-                                    <h4 class="font-medium text-gray-900">Gérer les utilisateurs</h4>
-                                    <p class="text-sm text-gray-500">Voir tous les utilisateurs</p>
-                                </div>
-                            </div>
-                        </a>
-                        
-                        <a href="{{ route('products.index') }}" class="transform transition-all duration-300 hover:scale-105">
-                            <div class="flex items-center p-4 bg-green-50 rounded-lg hover:bg-green-100">
-                                <div class="p-3 rounded-full bg-green-100">
-                                    <svg class="w-4 h-4 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"></path>
-                                    </svg>
-                                </div>
-                                <div class="ml-4">
-                                    <h4 class="font-medium text-gray-900">Gérer les produits</h4>
-                                    <p class="text-sm text-gray-500">Voir tous les produits</p>
-                                </div>
-                            </div>
-                        </a>
-                        
-                        <a href="#" class="transform transition-all duration-300 hover:scale-105">
-                            <div class="flex items-center p-4 bg-yellow-50 rounded-lg hover:bg-yellow-100">
-                                <div class="p-3 rounded-full bg-yellow-100">
-                                    <svg class="w-4 h-4 text-yellow-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"></path>
-                                    </svg>
-                                </div>
-                                <div class="ml-4">
-                                    <h4 class="font-medium text-gray-900">Gérer les commandes</h4>
-                                    <p class="text-sm text-gray-500">Voir toutes les commandes</p>
-                                </div>
-                            </div>
-                        </a>
-                        
-                        <a href="#" class="transform transition-all duration-300 hover:scale-105">
-                            <div class="flex items-center p-4 bg-purple-50 rounded-lg hover:bg-purple-100">
-                                <div class="p-3 rounded-full bg-purple-100">
-                                    <svg class="w-4 h-4 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"></path>
-                                    </svg>
-                                </div>
-                                <div class="ml-4">
-                                    <h4 class="font-medium text-gray-900">Statistiques</h4>
-                                    <p class="text-sm text-gray-500">Voir les analyses</p>
-                                </div>
-                            </div>
-                        </a>
-                    </div>
-                </div>
-            </div>
-
-            <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
-                <!-- Utilisateurs récents -->
-                <div class="bg-white overflow-hidden shadow-xl rounded-lg">
-                    <div class="p-6">
-                        <div class="flex items-center justify-between mb-6">
-                            <h3 class="text-lg font-semibold text-gray-900 flex items-center">
-                                <svg class="w-5 h-5 mr-2 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"></path>
-                                </svg>
-                                Utilisateurs récents
-                            </h3>
-                            <a href="#" class="text-blue-600 hover:text-blue-800 text-sm font-medium">Voir tout</a>
-                        </div>
-                        
-                        <div class="space-y-4">
-                            @forelse($recentUsers ?? [] as $user)
-                                <div class="flex items-center space-x-4 p-4 bg-gray-50 rounded-lg hover:bg-gray-100 transition-colors">
-                                    <div class="w-10 h-10 bg-blue-100 rounded-full flex items-center justify-center">
-                                        <span class="text-blue-600 font-semibold">{{ substr($user->name, 0, 1) }}</span>
-                                    </div>
-                                    <div class="flex-1">
-                                        <h4 class="font-medium text-gray-900">{{ $user->name }}</h4>
-                                        <p class="text-sm text-gray-500">{{ $user->email }}</p>
-                                        <p class="text-xs text-gray-400">Inscrit le {{ $user->created_at->format('d/m/Y') }}</p>
-                                    </div>
-                                    <div class="flex space-x-2">
-                                        <span class="px-2 py-1 rounded-full text-xs font-medium
-                                            @if($user->role === 'admin') bg-red-100 text-red-800
-                                            @elseif($user->role === 'seller') bg-blue-100 text-blue-800
-                                            @else bg-green-100 text-green-800
-                                            @endif">
-                                            {{ ucfirst($user->role) }}
-                                        </span>
-                                    </div>
-                                </div>
-                            @empty
-                                <div class="text-center py-8">
-                                    <svg class="mx-auto h-12 w-12 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"></path>
-                                    </svg>
-                                    <h3 class="mt-2 text-sm font-medium text-gray-900">Aucun utilisateur</h3>
-                                    <p class="mt-1 text-sm text-gray-500">Commencez par créer un nouvel utilisateur.</p>
-                                </div>
-                            @endforelse
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Commandes récentes -->
-                <div class="bg-white overflow-hidden shadow-xl rounded-lg">
-                    <div class="p-6">
-                        <div class="flex items-center justify-between mb-6">
-                            <h3 class="text-lg font-semibold text-gray-900 flex items-center">
-                                <svg class="w-5 h-5 mr-2 text-yellow-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"></path>
-                                </svg>
-                                Commandes récentes
-                            </h3>
-                            <a href="#" class="text-yellow-600 hover:text-yellow-800 text-sm font-medium">Voir tout</a>
-                        </div>
-                        
-                        <div class="space-y-4">
-                            @forelse($recentOrders ?? [] as $order)
-                                <div class="flex items-center justify-between p-4 bg-gray-50 rounded-lg hover:bg-gray-100 transition-colors">
-                                    <div>
-                                        <h4 class="font-medium text-gray-900">Commande #{{ $order->id }}</h4>
-                                        <p class="text-sm text-gray-500">{{ $order->user->name ?? 'Utilisateur supprimé' }}</p>
-                                        <p class="text-xs text-gray-400">{{ $order->created_at->format('d/m/Y H:i') }}</p>
-                                        <p class="text-sm font-medium text-gray-900">{{ number_format($order->total, 2) }} €</p>
-                                    </div>
-                                    <span class="px-3 py-1 rounded-full text-sm font-medium
-                                        @if($order->status === 'pending') bg-yellow-100 text-yellow-800
-                                        @elseif($order->status === 'processing') bg-blue-100 text-blue-800
-                                        @elseif($order->status === 'shipped') bg-green-100 text-green-800
-                                        @else bg-gray-100 text-gray-800
-                                        @endif">
-                                        {{ ucfirst($order->status) }}
-                                    </span>
-                                </div>
-                            @empty
-                                <div class="text-center py-8">
-                                    <svg class="mx-auto h-12 w-12 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"></path>
-                                    </svg>
-                                    <h3 class="mt-2 text-sm font-medium text-gray-900">Aucune commande</h3>
-                                    <p class="mt-1 text-sm text-gray-500">Les commandes apparaîtront ici.</p>
-                                </div>
-                            @endforelse
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Graphiques et statistiques -->
-            <div class="mt-8 bg-white overflow-hidden shadow-xl rounded-lg">
-                <div class="p-6">
-                    <h3 class="text-lg font-semibold text-gray-900 mb-6 flex items-center">
-                        <svg class="w-5 h-5 mr-2 text-indigo-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"></path>
-                        </svg>
-                        Statistiques du mois
-                    </h3>
-                    <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-                        <div class="text-center p-6 bg-indigo-50 rounded-lg">
-                            <div class="text-3xl font-bold text-indigo-600">{{ $monthlyOrders ?? 0 }}</div>
-                            <div class="text-sm text-gray-500">Commandes ce mois</div>
-                        </div>
-                        <div class="text-center p-6 bg-green-50 rounded-lg">
-                            <div class="text-3xl font-bold text-green-600">{{ number_format($monthlyRevenue ?? 0, 2) }} €</div>
-                            <div class="text-sm text-gray-500">Revenus ce mois</div>
-                        </div>
-                        <div class="text-center p-6 bg-purple-50 rounded-lg">
-                            <div class="text-3xl font-bold text-purple-600">{{ $monthlyUsers ?? 0 }}</div>
-                            <div class="text-sm text-gray-500">Nouveaux utilisateurs</div>
+                        <div class="d-flex gap-2">
+                            <button onclick="window.location.href='{{ route('admin.dashboard') }}'" class="btn btn-primary">
+                                <i class="fas fa-sync-alt me-1"></i> Actualiser
+                            </button>
+                            <button onclick="exportData()" class="btn btn-success">
+                                <i class="fas fa-download me-1"></i> Exporter
+                            </button>
                         </div>
                     </div>
                 </div>
@@ -331,14 +57,304 @@
         </div>
     </div>
 
-    @push('scripts')
-    <script src="https://cdn.jsdelivr.net/npm/sortablejs@1.15.0/Sortable.min.js"></script>
-    <script src="{{ asset('js/admin-dashboard.js') }}"></script>
-    <script>
-        function exportData() {
-            // Implement export functionality
-            alert('Fonctionnalité d\'export en cours de développement');
-        }
-    </script>
-    @endpush
-</x-app-layout>
+    <!-- Statistiques générales -->
+    <div class="row g-4 mb-4">
+        <div class="col-lg-3 col-md-6">
+            <div class="card bg-primary text-white">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <div>
+                            <h6 class="card-title mb-1">Utilisateurs</h6>
+                            <h3 class="mb-0">{{ $usersCount ?? 0 }}</h3>
+                            <small class="opacity-75">Total des utilisateurs</small>
+                        </div>
+                        <i class="fas fa-users fa-2x opacity-75"></i>
+                    </div>
+                    <div class="mt-3">
+                        <a href="#" class="text-white text-decoration-none small">
+                            Voir les détails <i class="fas fa-arrow-right ms-1"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-lg-3 col-md-6">
+            <div class="card bg-success text-white">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <div>
+                            <h6 class="card-title mb-1">Produits</h6>
+                            <h3 class="mb-0">{{ $productsCount ?? 0 }}</h3>
+                            <small class="opacity-75">Catalogue total</small>
+                        </div>
+                        <i class="fas fa-box fa-2x opacity-75"></i>
+                    </div>
+                    <div class="mt-3">
+                        <a href="{{ route('products.index') }}" class="text-white text-decoration-none small">
+                            Gérer les produits <i class="fas fa-arrow-right ms-1"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-lg-3 col-md-6">
+            <div class="card bg-warning text-white">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <div>
+                            <h6 class="card-title mb-1">Commandes</h6>
+                            <h3 class="mb-0">{{ $ordersCount ?? 0 }}</h3>
+                            <small class="opacity-75">Total des commandes</small>
+                        </div>
+                        <i class="fas fa-shopping-cart fa-2x opacity-75"></i>
+                    </div>
+                    <div class="mt-3">
+                        <a href="#" class="text-white text-decoration-none small">
+                            Voir les commandes <i class="fas fa-arrow-right ms-1"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-lg-3 col-md-6">
+            <div class="card bg-info text-white">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <div>
+                            <h6 class="card-title mb-1">Revenus</h6>
+                            <h3 class="mb-0">{{ number_format($revenue ?? 0, 2) }} DH</h3>
+                            <small class="opacity-75">Chiffre d'affaires total</small>
+                        </div>
+                        <i class="fas fa-money-bill-wave fa-2x opacity-75"></i>
+                    </div>
+                    <div class="mt-3">
+                        <a href="#" class="text-white text-decoration-none small">
+                            Voir les détails <i class="fas fa-arrow-right ms-1"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Actions rapides -->
+    <div class="row g-4 mb-4">
+        <div class="col-md-4">
+            <div class="card border-primary h-100">
+                <div class="card-body text-center">
+                    <div class="bg-primary bg-opacity-10 rounded-circle d-inline-flex align-items-center justify-content-center mb-3" style="width: 60px; height: 60px;">
+                        <i class="fas fa-plus fa-2x text-primary"></i>
+                    </div>
+                    <h5 class="card-title">Ajouter un produit</h5>
+                    <p class="card-text text-muted">Créer un nouveau produit</p>
+                    <a href="{{ route('products.create') }}" class="btn btn-primary">
+                        <i class="fas fa-plus me-1"></i>Ajouter
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-4">
+            <div class="card border-success h-100">
+                <div class="card-body text-center">
+                    <div class="bg-success bg-opacity-10 rounded-circle d-inline-flex align-items-center justify-content-center mb-3" style="width: 60px; height: 60px;">
+                        <i class="fas fa-box fa-2x text-success"></i>
+                    </div>
+                    <h5 class="card-title">Gérer les produits</h5>
+                    <p class="card-text text-muted">Voir tous vos produits</p>
+                    <a href="{{ route('products.index') }}" class="btn btn-success">
+                        <i class="fas fa-list me-1"></i>Gérer
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-4">
+            <div class="card border-info h-100">
+                <div class="card-body text-center">
+                    <div class="bg-info bg-opacity-10 rounded-circle d-inline-flex align-items-center justify-content-center mb-3" style="width: 60px; height: 60px;">
+                        <i class="fas fa-chart-bar fa-2x text-info"></i>
+                    </div>
+                    <h5 class="card-title">Voir les statistiques</h5>
+                    <p class="card-text text-muted">Analyser vos ventes</p>
+                    <a href="#" class="btn btn-info">
+                        <i class="fas fa-chart-bar me-1"></i>Statistiques
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row g-4">
+        <!-- Utilisateurs récents -->
+        <div class="col-lg-6">
+            <div class="card">
+                <div class="card-header d-flex justify-content-between align-items-center">
+                    <h5 class="card-title mb-0 fw-bold">
+                        <i class="fas fa-users me-2 text-primary"></i>Utilisateurs récents
+                    </h5>
+                    <a href="#" class="btn btn-outline-primary btn-sm">Voir tout</a>
+                </div>
+                <div class="card-body">
+                    @forelse($recentUsers ?? [] as $user)
+                        <div class="d-flex align-items-center justify-content-between p-3 border-bottom">
+                            <div class="d-flex align-items-center">
+                                <div class="bg-primary bg-opacity-10 rounded-circle d-flex align-items-center justify-content-center me-3" style="width: 40px; height: 40px;">
+                                    <span class="text-primary fw-bold">{{ substr($user->name, 0, 1) }}</span>
+                                </div>
+                                <div>
+                                    <h6 class="fw-bold mb-1">{{ $user->name }}</h6>
+                                    <p class="text-muted mb-1 small">{{ $user->email }}</p>
+                                    <small class="text-muted">Inscrit le {{ $user->created_at->format('d/m/Y') }}</small>
+                                </div>
+                            </div>
+                            <div class="d-flex align-items-center gap-2">
+                                <span class="badge bg-{{ 
+                                    $user->role === 'admin' ? 'danger' : 
+                                    ($user->role === 'seller' ? 'primary' : 'success') 
+                                }}">
+                                    {{ ucfirst($user->role) }}
+                                </span>
+                                
+                                <div class="dropdown">
+                                    <button class="btn btn-outline-secondary btn-sm dropdown-toggle" type="button" data-bs-toggle="dropdown">
+                                        <i class="fas fa-cog"></i>
+                                    </button>
+                                    <ul class="dropdown-menu">
+                                        <li><a class="dropdown-item" href="#"><i class="fas fa-edit me-2"></i>Modifier</a></li>
+                                        <li><a class="dropdown-item" href="#"><i class="fas fa-eye me-2"></i>Voir</a></li>
+                                        <li><hr class="dropdown-divider"></li>
+                                        <li><a class="dropdown-item text-danger" href="#"><i class="fas fa-trash me-2"></i>Supprimer</a></li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    @empty
+                        <div class="text-center py-4">
+                            <i class="fas fa-users fa-3x text-muted mb-3"></i>
+                            <h6 class="text-muted">Aucun utilisateur</h6>
+                            <p class="text-muted small">Commencez par créer un nouvel utilisateur.</p>
+                        </div>
+                    @endforelse
+                </div>
+            </div>
+        </div>
+
+        <!-- Commandes récentes -->
+        <div class="col-lg-6">
+            <div class="card">
+                <div class="card-header d-flex justify-content-between align-items-center">
+                    <h5 class="card-title mb-0 fw-bold">
+                        <i class="fas fa-shopping-cart me-2 text-warning"></i>Commandes récentes
+                    </h5>
+                    <a href="#" class="btn btn-outline-warning btn-sm">Voir tout</a>
+                </div>
+                <div class="card-body">
+                    @forelse($recentOrders ?? [] as $order)
+                        <div class="d-flex align-items-center justify-content-between p-3 border-bottom">
+                            <div>
+                                <h6 class="fw-bold mb-1">Commande #{{ $order->id }}</h6>
+                                <p class="text-muted mb-1 small">{{ $order->user->name ?? 'Utilisateur supprimé' }}</p>
+                                <small class="text-muted">{{ $order->created_at->format('d/m/Y H:i') }}</small>
+                                <p class="fw-bold text-primary mb-0">{{ number_format($order->total, 2) }} DH</p>
+                            </div>
+                            <div class="d-flex align-items-center gap-2">
+                                <span class="badge bg-{{ 
+                                    $order->status === 'pending' ? 'warning' : 
+                                    ($order->status === 'processing' ? 'info' : 
+                                    ($order->status === 'shipped' ? 'success' : 'secondary')) 
+                                }}">
+                                    {{ ucfirst($order->status) }}
+                                </span>
+                                
+                                <div class="dropdown">
+                                    <button class="btn btn-outline-secondary btn-sm dropdown-toggle" type="button" data-bs-toggle="dropdown">
+                                        <i class="fas fa-cog"></i>
+                                    </button>
+                                    <ul class="dropdown-menu">
+                                        <li><a class="dropdown-item" href="#"><i class="fas fa-eye me-2"></i>Voir détails</a></li>
+                                        <li><a class="dropdown-item" href="#"><i class="fas fa-edit me-2"></i>Modifier statut</a></li>
+                                        <li><hr class="dropdown-divider"></li>
+                                        <li><a class="dropdown-item text-danger" href="#"><i class="fas fa-trash me-2"></i>Supprimer</a></li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    @empty
+                        <div class="text-center py-4">
+                            <i class="fas fa-shopping-cart fa-3x text-muted mb-3"></i>
+                            <h6 class="text-muted">Aucune commande</h6>
+                            <p class="text-muted small">Les commandes apparaîtront ici.</p>
+                        </div>
+                    @endforelse
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Statistiques du mois -->
+    <div class="row mt-4">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-header">
+                    <h5 class="card-title mb-0 fw-bold">
+                        <i class="fas fa-chart-line me-2 text-info"></i>Statistiques du mois
+                    </h5>
+                </div>
+                <div class="card-body">
+                    <div class="row g-4">
+                        <div class="col-md-4">
+                            <div class="text-center p-4 bg-info bg-opacity-10 rounded-lg">
+                                <div class="h2 fw-bold text-info mb-2">{{ $monthlyOrders ?? 0 }}</div>
+                                <div class="text-muted">Commandes ce mois</div>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="text-center p-4 bg-success bg-opacity-10 rounded-lg">
+                                <div class="h2 fw-bold text-success mb-2">{{ number_format($monthlyRevenue ?? 0, 2) }} DH</div>
+                                <div class="text-muted">Revenus ce mois</div>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="text-center p-4 bg-warning bg-opacity-10 rounded-lg">
+                                <div class="h2 fw-bold text-warning mb-2">{{ $monthlyUsers ?? 0 }}</div>
+                                <div class="text-muted">Nouveaux utilisateurs</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    function exportData() {
+        // Implement export functionality
+        alert('Fonctionnalité d\'export en cours de développement');
+    }
+</script>
+
+<style>
+.card {
+    transition: all 0.3s ease;
+}
+
+.card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+}
+
+.border-bottom:last-child {
+    border-bottom: none !important;
+}
+
+.dropdown-toggle::after {
+    display: none;
+}
+</style>
+
+@endsection

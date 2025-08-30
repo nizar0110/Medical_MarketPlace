@@ -25,7 +25,7 @@ class PurchasesController extends Controller
             'monthly_orders' => DB::table('erp_purchases_purchase_orders')
                 ->whereMonth('created_at', now()->month)
                 ->count(),
-            'total_amount' => '0.00 €'
+            'total_amount' => '0.00 DH'
         ];
         
         // Fournisseurs récents
@@ -49,7 +49,7 @@ class PurchasesController extends Controller
     public function suppliers()
     {
         $suppliers = DB::table('erp_purchases_suppliers')
-            ->orderBy('name')
+            ->orderBy('company_name')
             ->paginate(15);
             
         $stats = ['title' => 'Gestion des Fournisseurs'];

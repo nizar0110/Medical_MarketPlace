@@ -38,17 +38,7 @@ class ERPController extends Controller
                     ]
                 ];
                 
-            case 'accountant':
-                return [
-                    'title' => 'Comptabilité',
-                    'icon' => 'fas fa-calculator',
-                    'stats' => [
-                        ['label' => 'Comptes Actifs', 'value' => 0, 'color' => 'primary'],
-                        ['label' => 'Écritures du Mois', 'value' => 0, 'color' => 'success'],
-                        ['label' => 'Paiements en Attente', 'value' => 0, 'color' => 'warning'],
-                        ['label' => 'Solde Général', 'value' => '0 €', 'color' => 'info'],
-                    ]
-                ];
+
                 
             case 'buyer':
                 return [
@@ -58,7 +48,7 @@ class ERPController extends Controller
                         ['label' => 'Fournisseurs', 'value' => 0, 'color' => 'primary'],
                         ['label' => 'Commandes en Cours', 'value' => 0, 'color' => 'warning'],
                         ['label' => 'Commandes du Mois', 'value' => 0, 'color' => 'success'],
-                        ['label' => 'Montant Total', 'value' => '0 €', 'color' => 'info'],
+                        ['label' => 'Montant Total', 'value' => '0 DH', 'color' => 'info'],
                     ]
                 ];
                 
@@ -70,7 +60,7 @@ class ERPController extends Controller
                         ['label' => 'Clients', 'value' => 0, 'color' => 'primary'],
                         ['label' => 'Devis en Cours', 'value' => 0, 'color' => 'warning'],
                         ['label' => 'Factures du Mois', 'value' => 0, 'color' => 'success'],
-                        ['label' => 'Chiffre d\'Affaires', 'value' => '0 €', 'color' => 'info'],
+                        ['label' => 'Chiffre d\'Affaires', 'value' => '0 DH', 'color' => 'info'],
                     ]
                 ];
                 

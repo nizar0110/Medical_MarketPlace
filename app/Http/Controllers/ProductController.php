@@ -145,10 +145,18 @@ class ProductController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy($id)
+    public function destroy(Request $request, $id)
     {
         $product = Product::findOrFail($id);
+        $categoryId = $product->category_id;
         $product->delete();
+        
+        // Si on vient d'une catégorie spécifique, retourner aux produits filtrés par catégorie
+        if ($request->has('from_category')) {
+            return redirect()->route('products.index', ['category' => $request->from_category])->with('success', 'Produit supprimé avec succès.');
+        }
+        
+        // Sinon retourner à la liste générale des produits
         return redirect()->route('products.index')->with('success', 'Produit supprimé avec succès.');
     }
 }

@@ -84,7 +84,7 @@
                                     </a></li>
                                 @endif
                                 
-                                @if(in_array(Auth::user()->role, ['warehouse_manager', 'accountant', 'buyer', 'sales_manager', 'admin']))
+                                @if(in_array(Auth::user()->role, ['warehouse_manager', 'buyer', 'sales_manager', 'admin']))
                                     <li><hr class="dropdown-divider"></li>
                                     <li><a class="dropdown-item" href="{{ route('erp.dashboard') }}">
                                         <i class="fas fa-cogs me-2"></i>Accès ERP

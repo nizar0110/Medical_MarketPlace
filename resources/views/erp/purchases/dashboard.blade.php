@@ -76,7 +76,7 @@
                             <h3 class="mb-0 text-info">{{ $stats['total_amount'] }}</h3>
                         </div>
                         <div class="bg-info bg-opacity-10 p-3 rounded">
-                            <i class="fas fa-euro-sign text-info fa-2x"></i>
+                            <i class="fas fa-money-bill text-info fa-2x"></i>
                         </div>
                     </div>
                 </div>
@@ -113,7 +113,7 @@
                                         <td>{{ \Carbon\Carbon::parse($order->created_at)->format('d/m/Y') }}</td>
                                         <td>{{ $order->reference ?: '-' }}</td>
                                         <td>{{ $order->supplier_name ?: 'N/A' }}</td>
-                                        <td>{{ $order->total_amount ?: '0.00' }} €</td>
+                                        <td>{{ $order->total_amount ?: '0.00' }} DH</td>
                                         <td>
                                             @if($order->status === 'pending')
                                                 <span class="badge bg-warning">En cours</span>
@@ -153,7 +153,7 @@
                             <div class="list-group-item border-0 px-0">
                                 <div class="d-flex justify-content-between align-items-center">
                                     <div>
-                                        <h6 class="mb-1">{{ $supplier->name }}</h6>
+                                        <h6 class="mb-1">{{ $supplier->company_name }}</h6>
                                         <small class="text-muted">{{ $supplier->city ?: '' }}</small>
                                     </div>
                                     <span class="badge bg-success">Actif</span>

@@ -22,7 +22,7 @@ class CheckERPRole
         }
         
         // Rôles ERP autorisés
-        $erpRoles = ['warehouse_manager', 'accountant', 'buyer', 'sales_manager', 'admin'];
+        $erpRoles = ['warehouse_manager', 'buyer', 'sales_manager', 'admin'];
         
         if (!in_array($user->role, $erpRoles)) {
             return redirect()->route('dashboard')->with('error', 'Accès non autorisé à l\'ERP.');
@@ -49,8 +49,7 @@ class CheckERPRole
             case 'warehouse_manager':
                 return ['inventory'];
                 
-            case 'accountant':
-                return ['accounting'];
+
                 
             case 'buyer':
                 return ['purchases'];
@@ -59,7 +58,7 @@ class CheckERPRole
                 return ['sales'];
                 
             case 'admin':
-                return ['inventory', 'accounting', 'purchases', 'sales'];
+                return ['inventory', 'purchases', 'sales'];
                 
             default:
                 return [];

@@ -50,19 +50,7 @@ return [
                 'manage_supplier_terms',
             ],
         ],
-        'accounting' => [
-            'enabled' => env('ERP_ACCOUNTING_ENABLED', true),
-            'name' => 'Comptabilité',
-            'description' => 'Module de comptabilité et gestion financière',
-            'permissions' => [
-                'view_accounting',
-                'manage_chart_of_accounts',
-                'create_journal_entries',
-                'view_financial_reports',
-                'manage_payments',
-                'view_audit_trail',
-            ],
-        ],
+
     ],
 
     /*
@@ -86,17 +74,7 @@ return [
                 'manage_stock_levels',
             ],
         ],
-        'accountant' => [
-            'name' => 'Comptable',
-            'permissions' => [
-                'view_accounting',
-                'manage_chart_of_accounts',
-                'create_journal_entries',
-                'view_financial_reports',
-                'manage_payments',
-                'view_audit_trail',
-            ],
-        ],
+
         'buyer' => [
             'name' => 'Acheteur',
             'permissions' => [
@@ -131,16 +109,16 @@ return [
     */
 
     'settings' => [
-        'company_name' => env('ERP_COMPANY_NAME', 'Medical Marketplace'),
-        'company_address' => env('ERP_COMPANY_ADDRESS', ''),
-        'company_phone' => env('ERP_COMPANY_PHONE', ''),
-        'company_email' => env('ERP_COMPANY_EMAIL', ''),
-        'tax_rate' => env('ERP_DEFAULT_TAX_RATE', 20.0), // Taux de TVA par défaut
-        'currency' => env('ERP_CURRENCY', 'EUR'),
-        'fiscal_year_start' => env('ERP_FISCAL_YEAR_START', '01-01'),
+        'company_name' => env('ERP_COMPANY_NAME', 'Medical Market SARL'),
+        'company_address' => env('ERP_COMPANY_ADDRESS', '123 Rue de la Santé, Quartier Maarif, Casablanca 20000, Maroc'),
+        'company_phone' => env('ERP_COMPANY_PHONE', '+212 6 12 345 678'),
+        'company_email' => env('ERP_COMPANY_EMAIL', 'erp@medicalmarket.ma'),
+        'tax_rate' => env('ERP_DEFAULT_TAX_RATE', 20.0), // Taux de TVA marocain par défaut
+        'currency' => env('ERP_CURRENCY', 'MAD'), // Dirham marocain
+        'fiscal_year_start' => env('ERP_FISCAL_YEAR_START', '01-01'), // Année fiscale marocaine
         'auto_generate_journal_entries' => env('ERP_AUTO_JOURNAL_ENTRIES', true),
         'stock_valuation_method' => env('ERP_STOCK_VALUATION', 'average'), // average, fifo, lifo
-        'default_payment_terms' => env('ERP_DEFAULT_PAYMENT_TERMS', 30), // jours
+        'default_payment_terms' => env('ERP_DEFAULT_PAYMENT_TERMS', 30), // jours (standard marocain)
     ],
 
     /*

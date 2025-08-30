@@ -75,7 +75,6 @@
                         </div>
                         <h5 class="card-title fw-bold">Cardiologie</h5>
                         <p class="card-text text-muted">Équipements et dispositifs pour la santé cardiovasculaire</p>
-                        <a href="{{ route('categories.show', 1) }}" class="btn btn-outline-primary">Voir les produits</a>
                     </div>
                 </div>
             </div>
@@ -88,7 +87,6 @@
                         </div>
                         <h5 class="card-title fw-bold">Neurologie</h5>
                         <p class="card-text text-muted">Instruments et dispositifs pour la neurologie</p>
-                        <a href="{{ route('categories.show', 2) }}" class="btn btn-outline-success">Voir les produits</a>
                     </div>
                 </div>
             </div>
@@ -101,7 +99,6 @@
                         </div>
                         <h5 class="card-title fw-bold">Ophtalmologie</h5>
                         <p class="card-text text-muted">Équipements pour la santé oculaire</p>
-                        <a href="{{ route('categories.show', 3) }}" class="btn btn-outline-info">Voir les produits</a>
                     </div>
                 </div>
             </div>
@@ -114,7 +111,6 @@
                         </div>
                         <h5 class="card-title fw-bold">Orthopédie</h5>
                         <p class="card-text text-muted">Dispositifs et équipements orthopédiques</p>
-                        <a href="{{ route('categories.show', 4) }}" class="btn btn-outline-warning">Voir les produits</a>
                     </div>
                 </div>
             </div>
@@ -127,7 +123,6 @@
                         </div>
                         <h5 class="card-title fw-bold">Diagnostic</h5>
                         <p class="card-text text-muted">Instruments de diagnostic et de mesure</p>
-                        <a href="{{ route('categories.show', 5) }}" class="btn btn-outline-danger">Voir les produits</a>
                     </div>
                 </div>
             </div>
@@ -140,13 +135,14 @@
                         </div>
                         <h5 class="card-title fw-bold">Médicaments</h5>
                         <p class="card-text text-muted">Produits pharmaceutiques et médicaments</p>
-                        <a href="{{ route('categories.show', 6) }}" class="btn btn-outline-secondary">Voir les produits</a>
                     </div>
                 </div>
             </div>
         </div>
     </div>
 </section>
+
+
 
 <!-- Section Avantages -->
 <section class="py-5">

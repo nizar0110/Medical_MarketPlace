@@ -16,7 +16,7 @@ return new class extends Migration
         DB::statement("ALTER TABLE users MODIFY COLUMN role VARCHAR(50) DEFAULT 'client'");
         
         // Then recreate the enum with all roles
-        DB::statement("ALTER TABLE users MODIFY COLUMN role ENUM('admin', 'seller', 'client', 'warehouse_manager', 'accountant', 'buyer', 'sales_manager') DEFAULT 'client'");
+        DB::statement("ALTER TABLE users MODIFY COLUMN role ENUM('admin', 'seller', 'client', 'warehouse_manager', 'buyer', 'sales_manager') DEFAULT 'client'");
     }
 
     /**

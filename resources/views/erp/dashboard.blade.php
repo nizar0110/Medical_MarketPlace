@@ -73,22 +73,7 @@
                         </div>
                         @endif
 
-                        @if(auth()->user()->role === 'accountant' || auth()->user()->role === 'admin')
-                        <div class="col-md-3 mb-3">
-                            <a href="#" class="btn btn-outline-info w-100 p-3">
-                                <i class="fas fa-journal-whills fa-2x mb-2"></i>
-                                <br>
-                                Nouvelle Écriture
-                            </a>
-                        </div>
-                        <div class="col-md-3 mb-3">
-                            <a href="#" class="btn btn-outline-warning w-100 p-3">
-                                <i class="fas fa-file-invoice-dollar fa-2x mb-2"></i>
-                                <br>
-                                Rapports
-                            </a>
-                        </div>
-                        @endif
+
 
                         @if(auth()->user()->role === 'buyer' || auth()->user()->role === 'admin')
                         <div class="col-md-3 mb-3">

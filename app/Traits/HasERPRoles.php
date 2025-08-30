@@ -17,11 +17,7 @@ trait HasERPRoles
             'erp.inventory.locations.*',
             'erp.inventory.stock.*',
         ],
-        'accountant' => [
-            'erp.accounting.*',
-            'erp.accounting.journal.*',
-            'erp.accounting.payments.*',
-        ],
+
         'buyer' => [
             'erp.purchases.*',
             'erp.inventory.view',

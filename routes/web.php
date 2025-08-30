@@ -160,12 +160,7 @@ Route::post('/seller/products', function (\Illuminate\Http\Request $request) {
             Route::post('/movements', [\App\Http\Controllers\ERP\InventoryController::class, 'storeMovement'])->name('movements.store');
         });
         
-        // Module Comptabilité
-        Route::prefix('accounting')->name('accounting.')->middleware('erp.role:accounting')->group(function () {
-            Route::get('/dashboard', [\App\Http\Controllers\ERP\AccountingController::class, 'dashboard'])->name('dashboard');
-            Route::get('/chart-of-accounts', [\App\Http\Controllers\ERP\AccountingController::class, 'chartOfAccounts'])->name('chart_of_accounts');
-            Route::get('/journal-entries', [\App\Http\Controllers\ERP\AccountingController::class, 'journalEntries'])->name('journal_entries');
-        });
+
         
         // Module Achats
         Route::prefix('purchases')->name('purchases.')->middleware('erp.role:purchases')->group(function () {

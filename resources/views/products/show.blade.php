@@ -15,7 +15,11 @@
         <!-- Image du produit -->
         <div class="col-lg-6 mb-4">
             @if($product->image)
-                <img src="{{ asset('storage/' . $product->image) }}" class="img-fluid rounded shadow" alt="{{ $product->name }}">
+                @if(Str::startsWith($product->image, 'http'))
+                    <img src="{{ $product->image }}" class="img-fluid rounded shadow" alt="{{ $product->name }}">
+                @else
+                    <img src="{{ asset('storage/' . $product->image) }}" class="img-fluid rounded shadow" alt="{{ $product->name }}">
+                @endif
             @else
                 <div class="bg-light rounded shadow d-flex align-items-center justify-content-center" style="height: 400px;">
                     <i class="fas fa-image fa-4x text-muted"></i>
@@ -80,6 +84,15 @@
                             <a href="{{ route('products.edit', $product) }}" class="btn btn-outline-primary btn-sm me-2">
                                 <i class="fas fa-edit me-1"></i>Modifier
                             </a>
+                            
+                            <form action="{{ route('products.destroy', $product) }}" method="POST" class="d-inline" onsubmit="return confirm('Êtes-vous sûr de vouloir supprimer ce produit ?')">
+                                @csrf
+                                @method('DELETE')
+                                <input type="hidden" name="from_category" value="{{ $product->category_id }}">
+                                <button type="submit" class="btn btn-outline-danger btn-sm me-2">
+                                    <i class="fas fa-trash me-1"></i>Supprimer
+                                </button>
+                            </form>
                         @endif
                         <a href="{{ route('products.index') }}" class="btn btn-outline-secondary btn-sm">
                             <i class="fas fa-list me-1"></i>Voir tous les produits

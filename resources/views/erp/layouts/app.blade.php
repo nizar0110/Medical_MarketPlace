@@ -96,23 +96,7 @@
                         </div>
                         @endif
                         
-                        @if(auth()->user()->role === 'accountant' || auth()->user()->role === 'admin')
-                        <div class="mt-3">
-                            <small class="text-white-50 text-uppercase">Comptabilité</small>
-                            <a class="nav-link" href="{{ route('erp.accounting.dashboard') }}">
-                                <i class="fas fa-tachometer-alt"></i>
-                                Tableau de Bord
-                            </a>
-                            <a class="nav-link" href="{{ route('erp.accounting.chart_of_accounts') }}">
-                                <i class="fas fa-book"></i>
-                                Plan Comptable
-                            </a>
-                            <a class="nav-link" href="{{ route('erp.accounting.journal_entries') }}">
-                                <i class="fas fa-journal-whills"></i>
-                                Écritures
-                            </a>
-                        </div>
-                        @endif
+
                         
                         @if(auth()->user()->role === 'buyer' || auth()->user()->role === 'admin')
                         <div class="mt-3">
