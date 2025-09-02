@@ -91,7 +91,7 @@
             <div class="card shadow-sm h-100">
                 <div class="card-header d-flex justify-content-between align-items-center bg-white">
                     <h5 class="mb-0">Mes favoris</h5>
-                    <a href="#" class="text-primary small">Voir tout</a>
+                    <a href="{{ route('client.favorites') }}" class="text-primary small">Voir tout</a>
                 </div>
                 <div class="card-body">
                     @forelse($favorites ?? [] as $product)
@@ -109,7 +109,9 @@
                             </div>
                             <div class="d-flex align-items-center gap-2 ms-2">
                                 <a href="{{ route('products.show', $product) }}" class="text-primary"><i class="fas fa-eye"></i></a>
-                                <button class="btn btn-link text-danger p-0"><i class="fas fa-heart"></i></button>
+                                <button class="btn btn-link text-danger p-0" onclick="removeFavorite({{ $product->id }}, this)">
+                                    <i class="fas fa-heart"></i>
+                                </button>
                             </div>
                         </div>
                     @empty
@@ -168,4 +170,75 @@
 }
 .text-purple { color: #6f42c1; }
 </style>
+
+<script>
+// Fonction pour supprimer un favori
+function removeFavorite(productId, button) {
+    if (confirm('Êtes-vous sûr de vouloir retirer ce produit de vos favoris ?')) {
+        const productElement = button.closest('.d-flex.align-items-center.border.rounded.p-3.mb-3');
+        
+        fetch(`/favorites/remove/${productId}`, {
+            method: 'DELETE',
+            headers: {
+                'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content'),
+                'Content-Type': 'application/json',
+            }
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                // Supprimer l'élément de la liste
+                productElement.remove();
+                
+                // Mettre à jour le compteur
+                const favoritesCountElement = document.querySelector('.h4.mb-0');
+                const currentCount = parseInt(favoritesCountElement.textContent);
+                favoritesCountElement.textContent = currentCount - 1;
+                
+                // Afficher un message de succès
+                showNotification('Produit retiré des favoris', 'success');
+                
+                // Vérifier s'il reste des favoris
+                const remainingFavorites = document.querySelectorAll('.d-flex.align-items-center.border.rounded.p-3.mb-3');
+                if (remainingFavorites.length === 0) {
+                    const favoritesContainer = document.querySelector('.card-body');
+                    favoritesContainer.innerHTML = `
+                        <div class="text-center py-4">
+                            <i class="fas fa-heart fa-2x text-muted mb-2"></i>
+                            <p class="text-muted">Aucun favori encore</p>
+                            <a href="{{ route('products.index') }}" class="btn btn-primary btn-sm">Découvrir des produits</a>
+                        </div>
+                    `;
+                }
+            } else {
+                showNotification('Erreur lors de la suppression', 'error');
+            }
+        })
+        .catch(error => {
+            console.error('Erreur:', error);
+            showNotification('Une erreur est survenue', 'error');
+        });
+    }
+}
+
+// Fonction pour afficher les notifications
+function showNotification(message, type) {
+    const notification = document.createElement('div');
+    notification.className = `alert alert-${type === 'success' ? 'success' : 'danger'} alert-dismissible fade show position-fixed`;
+    notification.style.cssText = 'top: 20px; right: 20px; z-index: 9999; min-width: 300px;';
+    notification.innerHTML = `
+        ${message}
+        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+    `;
+    
+    document.body.appendChild(notification);
+    
+    // Supprimer automatiquement après 3 secondes
+    setTimeout(() => {
+        if (notification.parentNode) {
+            notification.remove();
+        }
+    }, 3000);
+}
+</script>
 @endsection 

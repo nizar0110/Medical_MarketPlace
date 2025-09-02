@@ -118,9 +118,16 @@
 
             <!-- Actions supplémentaires -->
             <div class="d-flex gap-2 mb-4">
-                <button class="btn btn-outline-primary">
-                    <i class="fas fa-heart me-1"></i>Favoris
-                </button>
+                @auth
+                    <button id="favoriteBtn" class="btn btn-outline-primary" onclick="toggleFavorite({{ $product->id }})">
+                        <i id="favoriteIcon" class="fas fa-heart me-1"></i>
+                        <span id="favoriteText">Favoris</span>
+                    </button>
+                @else
+                    <a href="{{ route('login') }}" class="btn btn-outline-primary">
+                        <i class="fas fa-heart me-1"></i>Favoris
+                    </a>
+                @endauth
                 <button class="btn btn-outline-secondary">
                     <i class="fas fa-share me-1"></i>Partager
                 </button>
@@ -206,5 +213,98 @@ function increaseQuantity() {
         input.value = currentValue + 1;
     }
 }
+
+// Fonction pour gérer les favoris
+function toggleFavorite(productId) {
+    const btn = document.getElementById('favoriteBtn');
+    const icon = document.getElementById('favoriteIcon');
+    const text = document.getElementById('favoriteText');
+    
+    // Désactiver le bouton pendant la requête
+    btn.disabled = true;
+    
+    fetch(`/favorites/toggle/${productId}`, {
+        method: 'POST',
+        headers: {
+            'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content'),
+            'Content-Type': 'application/json',
+        }
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            if (data.isFavorite) {
+                // Produit ajouté aux favoris
+                btn.classList.remove('btn-outline-primary');
+                btn.classList.add('btn-primary');
+                icon.classList.remove('far');
+                icon.classList.add('fas');
+                text.textContent = 'Favori';
+            } else {
+                // Produit retiré des favoris
+                btn.classList.remove('btn-primary');
+                btn.classList.add('btn-outline-primary');
+                icon.classList.remove('fas');
+                icon.classList.add('far');
+                text.textContent = 'Favoris';
+            }
+            
+            // Afficher un message de succès
+            showNotification(data.message, 'success');
+        } else {
+            showNotification(data.message, 'error');
+        }
+    })
+    .catch(error => {
+        console.error('Erreur:', error);
+        showNotification('Une erreur est survenue', 'error');
+    })
+    .finally(() => {
+        btn.disabled = false;
+    });
+}
+
+// Fonction pour afficher les notifications
+function showNotification(message, type) {
+    const notification = document.createElement('div');
+    notification.className = `alert alert-${type === 'success' ? 'success' : 'danger'} alert-dismissible fade show position-fixed`;
+    notification.style.cssText = 'top: 20px; right: 20px; z-index: 9999; min-width: 300px;';
+    notification.innerHTML = `
+        ${message}
+        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+    `;
+    
+    document.body.appendChild(notification);
+    
+    // Supprimer automatiquement après 3 secondes
+    setTimeout(() => {
+        if (notification.parentNode) {
+            notification.remove();
+        }
+    }, 3000);
+}
+
+// Vérifier l'état initial des favoris au chargement de la page
+document.addEventListener('DOMContentLoaded', function() {
+    @auth
+    const productId = {{ $product->id }};
+    fetch(`/favorites/check/${productId}`)
+        .then(response => response.json())
+        .then(data => {
+            if (data.success && data.isFavorite) {
+                const btn = document.getElementById('favoriteBtn');
+                const icon = document.getElementById('favoriteIcon');
+                const text = document.getElementById('favoriteText');
+                
+                btn.classList.remove('btn-outline-primary');
+                btn.classList.add('btn-primary');
+                icon.classList.remove('far');
+                icon.classList.add('fas');
+                text.textContent = 'Favori';
+            }
+        })
+        .catch(error => console.error('Erreur lors de la vérification des favoris:', error));
+    @endauth
+});
 </script>
 @endsection 

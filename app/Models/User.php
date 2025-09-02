@@ -65,4 +65,13 @@ class User extends Authenticatable
     {
         return $this->hasMany(Order::class, 'client_id');
     }
+
+    /**
+     * Un utilisateur a plusieurs produits favoris (relation many-to-many)
+     */
+    public function favorites()
+    {
+        return $this->belongsToMany(Product::class, 'user_favorites', 'user_id', 'product_id')
+                    ->withTimestamps();
+    }
 }

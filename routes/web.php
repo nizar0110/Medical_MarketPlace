@@ -174,7 +174,9 @@ Route::post('/seller/products', function (\Illuminate\Http\Request $request) {
             Route::get('/dashboard', [\App\Http\Controllers\ERP\SalesController::class, 'dashboard'])->name('dashboard');
             Route::get('/customers', [\App\Http\Controllers\ERP\SalesController::class, 'customers'])->name('customers');
             Route::get('/quotes', [\App\Http\Controllers\ERP\SalesController::class, 'quotes'])->name('quotes');
+            Route::post('/quotes', [\App\Http\Controllers\ERP\SalesController::class, 'storeQuote'])->name('quotes.store');
             Route::get('/invoices', [\App\Http\Controllers\ERP\SalesController::class, 'invoices'])->name('invoices');
+            Route::post('/invoices', [\App\Http\Controllers\ERP\SalesController::class, 'storeInvoice'])->name('invoices.store');
         });
     });
 });

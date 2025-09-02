@@ -2,6 +2,23 @@
 
 @section('content')
 <div class="container-fluid">
+    <!-- Messages de succès -->
+    @if(session('success'))
+        <div class="alert alert-success alert-dismissible fade show" role="alert">
+            <i class="fas fa-check-circle me-2"></i>
+            {{ session('success') }}
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        </div>
+    @endif
+
+    @if(session('error'))
+        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+            <i class="fas fa-exclamation-circle me-2"></i>
+            {{ session('error') }}
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        </div>
+    @endif
+
     <!-- Header -->
     <div class="row mb-4">
         <div class="col-12">
@@ -51,9 +68,9 @@
                                     @foreach($suppliers as $supplier)
                                     <tr>
                                         <td>
-                                            <div class="fw-bold">{{ $supplier->name }}</div>
-                                            @if($supplier->company_name)
-                                                <small class="text-muted">{{ $supplier->company_name }}</small>
+                                            <div class="fw-bold">{{ $supplier->company_name }}</div>
+                                            @if($supplier->contact_name)
+                                                <small class="text-muted">{{ $supplier->contact_name }}</small>
                                             @endif
                                         </td>
                                         <td>
@@ -67,7 +84,7 @@
                                         <td>{{ $supplier->city ?: '-' }}</td>
                                         <td>{{ $supplier->country ?: '-' }}</td>
                                         <td>
-                                            @if($supplier->is_active)
+                                            @if($supplier->status === 'active')
                                                 <span class="badge bg-success">Actif</span>
                                             @else
                                                 <span class="badge bg-secondary">Inactif</span>
@@ -93,12 +110,12 @@
                                                 <div class="modal-body">
                                                     <div class="row">
                                                         <div class="col-md-6">
-                                                            <strong>Nom:</strong><br>
-                                                            {{ $supplier->name }}
+                                                            <strong>Société:</strong><br>
+                                                            {{ $supplier->company_name }}
                                                         </div>
                                                         <div class="col-md-6">
-                                                            <strong>Société:</strong><br>
-                                                            {{ $supplier->company_name ?: 'Non définie' }}
+                                                            <strong>Contact:</strong><br>
+                                                            {{ $supplier->contact_name ?: 'Non défini' }}
                                                         </div>
                                                     </div>
                                                     <hr>
@@ -161,53 +178,59 @@
                 <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
             </div>
             <div class="modal-body">
-                <form>
+                <form method="POST" action="{{ route('erp.purchases.suppliers.store') }}">
+                    @csrf
                     <div class="row">
                         <div class="col-md-6 mb-3">
-                            <label for="name" class="form-label">Nom *</label>
-                            <input type="text" class="form-control" id="name" placeholder="Nom du fournisseur" required>
+                            <label for="company_name" class="form-label">Nom de la société *</label>
+                            <input type="text" class="form-control" id="company_name" name="company_name" placeholder="Nom de la société" required>
                         </div>
                         <div class="col-md-6 mb-3">
-                            <label for="company_name" class="form-label">Société</label>
-                            <input type="text" class="form-control" id="company_name" placeholder="Nom de la société">
+                            <label for="contact_name" class="form-label">Nom du contact</label>
+                            <input type="text" class="form-control" id="contact_name" name="contact_name" placeholder="Nom du contact">
                         </div>
                     </div>
                     
                     <div class="row">
                         <div class="col-md-6 mb-3">
                             <label for="email" class="form-label">Email</label>
-                            <input type="email" class="form-control" id="email" placeholder="email@exemple.com">
+                            <input type="email" class="form-control" id="email" name="email" placeholder="email@exemple.com">
                         </div>
                         <div class="col-md-6 mb-3">
                             <label for="phone" class="form-label">Téléphone</label>
-                            <input type="tel" class="form-control" id="phone" placeholder="+33 1 23 45 67 89">
+                            <input type="tel" class="form-control" id="phone" name="phone" placeholder="+212 5 22 34 56 78">
                         </div>
                     </div>
                     
                     <div class="mb-3">
                         <label for="address" class="form-label">Adresse</label>
-                        <textarea class="form-control" id="address" rows="2" placeholder="Adresse complète..."></textarea>
+                        <textarea class="form-control" id="address" name="address" rows="2" placeholder="Adresse complète..."></textarea>
                     </div>
                     
                     <div class="row">
-                        <div class="col-md-4 mb-3">
+                        <div class="col-md-3 mb-3">
                             <label for="postal_code" class="form-label">Code Postal</label>
-                            <input type="text" class="form-control" id="postal_code" placeholder="75001">
+                            <input type="text" class="form-control" id="postal_code" name="postal_code" placeholder="20000">
                         </div>
-                        <div class="col-md-4 mb-3">
+                        <div class="col-md-3 mb-3">
                             <label for="city" class="form-label">Ville</label>
-                            <input type="text" class="form-control" id="city" placeholder="Paris">
+                            <input type="text" class="form-control" id="city" name="city" placeholder="Casablanca">
                         </div>
-                        <div class="col-md-4 mb-3">
+                        <div class="col-md-3 mb-3">
+                            <label for="state" class="form-label">Région</label>
+                            <input type="text" class="form-control" id="state" name="state" placeholder="Casablanca-Settat">
+                        </div>
+                        <div class="col-md-3 mb-3">
                             <label for="country" class="form-label">Pays</label>
-                            <input type="text" class="form-control" id="country" placeholder="France">
+                            <input type="text" class="form-control" id="country" name="country" placeholder="Maroc" value="Maroc">
                         </div>
                     </div>
-                </form>
+                
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Annuler</button>
-                <button type="button" class="btn btn-primary">Créer le Fournisseur</button>
+                <button type="submit" class="btn btn-primary">Créer le Fournisseur</button>
+                </form>
             </div>
         </div>
     </div>

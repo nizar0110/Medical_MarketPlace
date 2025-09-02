@@ -2,6 +2,23 @@
 
 @section('content')
 <div class="container-fluid">
+    <!-- Messages de succès -->
+    @if(session('success'))
+        <div class="alert alert-success alert-dismissible fade show" role="alert">
+            <i class="fas fa-check-circle me-2"></i>
+            {{ session('success') }}
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        </div>
+    @endif
+
+    @if(session('error'))
+        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+            <i class="fas fa-exclamation-circle me-2"></i>
+            {{ session('error') }}
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        </div>
+    @endif
+
     <!-- Header -->
     <div class="row mb-4">
         <div class="col-12">
@@ -51,7 +68,7 @@
                                     @foreach($orders as $order)
                                     <tr>
                                         <td>
-                                            <span class="badge bg-primary">{{ $order->reference ?: 'N/A' }}</span>
+                                            <span class="badge bg-primary">{{ $order->po_number ?: 'N/A' }}</span>
                                         </td>
                                         <td>
                                             <div class="fw-bold">{{ $order->supplier_name ?: 'N/A' }}</div>
@@ -60,16 +77,20 @@
                                             <div class="fw-bold">{{ \Carbon\Carbon::parse($order->created_at)->format('d/m/Y') }}</div>
                                             <small class="text-muted">{{ \Carbon\Carbon::parse($order->created_at)->format('H:i') }}</small>
                                         </td>
+                                                                                 <td>
+                                             <span class="fw-bold text-success">{{ $order->total_amount ?: '0.00' }} DH</span>
+                                         </td>
                                         <td>
-                                            <span class="fw-bold text-success">{{ $order->total_amount ?: '0.00' }} €</span>
-                                        </td>
-                                        <td>
-                                            @if($order->status === 'pending')
-                                                <span class="badge bg-warning">En attente</span>
-                                            @elseif($order->status === 'approved')
-                                                <span class="badge bg-success">Approuvée</span>
+                                            @if($order->status === 'draft')
+                                                <span class="badge bg-secondary">Brouillon</span>
+                                            @elseif($order->status === 'sent')
+                                                <span class="badge bg-warning">Envoyée</span>
+                                            @elseif($order->status === 'confirmed')
+                                                <span class="badge bg-success">Confirmée</span>
+                                            @elseif($order->status === 'partially_received')
+                                                <span class="badge bg-info">Partiellement reçue</span>
                                             @elseif($order->status === 'received')
-                                                <span class="badge bg-info">Réceptionnée</span>
+                                                <span class="badge bg-success">Reçue</span>
                                             @elseif($order->status === 'cancelled')
                                                 <span class="badge bg-danger">Annulée</span>
                                             @else
@@ -95,10 +116,10 @@
                                                 </div>
                                                 <div class="modal-body">
                                                     <div class="row">
-                                                        <div class="col-md-6">
-                                                            <strong>Référence:</strong><br>
-                                                            {{ $order->reference ?: 'N/A' }}
-                                                        </div>
+                                                                                                                 <div class="col-md-6">
+                                                             <strong>Référence:</strong><br>
+                                                             {{ $order->po_number ?: 'N/A' }}
+                                                         </div>
                                                         <div class="col-md-6">
                                                             <strong>Date:</strong><br>
                                                             {{ \Carbon\Carbon::parse($order->created_at)->format('d/m/Y H:i') }}
@@ -110,28 +131,44 @@
                                                             <strong>Fournisseur:</strong><br>
                                                             {{ $order->supplier_name ?: 'N/A' }}
                                                         </div>
-                                                        <div class="col-md-6">
-                                                            <strong>Statut:</strong><br>
-                                                            @if($order->status === 'pending')
-                                                                <span class="badge bg-warning">En attente</span>
-                                                            @elseif($order->status === 'approved')
-                                                                <span class="badge bg-success">Approuvée</span>
-                                                            @elseif($order->status === 'received')
-                                                                <span class="badge bg-info">Réceptionnée</span>
-                                                            @elseif($order->status === 'cancelled')
-                                                                <span class="badge bg-danger">Annulée</span>
-                                                            @else
-                                                                <span class="badge bg-secondary">{{ $order->status }}</span>
-                                                            @endif
-                                                        </div>
+                                                                                                                 <div class="col-md-6">
+                                                             <strong>Statut:</strong><br>
+                                                             @if($order->status === 'draft')
+                                                                 <span class="badge bg-secondary">Brouillon</span>
+                                                             @elseif($order->status === 'sent')
+                                                                 <span class="badge bg-warning">Envoyée</span>
+                                                             @elseif($order->status === 'confirmed')
+                                                                 <span class="badge bg-success">Confirmée</span>
+                                                             @elseif($order->status === 'partially_received')
+                                                                 <span class="badge bg-info">Partiellement reçue</span>
+                                                             @elseif($order->status === 'received')
+                                                                 <span class="badge bg-success">Reçue</span>
+                                                             @elseif($order->status === 'cancelled')
+                                                                 <span class="badge bg-danger">Annulée</span>
+                                                             @else
+                                                                 <span class="badge bg-secondary">{{ $order->status }}</span>
+                                                             @endif
+                                                         </div>
                                                     </div>
                                                     <hr>
-                                                    <div class="row">
-                                                        <div class="col-md-6">
-                                                            <strong>Montant Total:</strong><br>
-                                                            <span class="h5 text-success">{{ $order->total_amount ?: '0.00' }} €</span>
-                                                        </div>
-                                                    </div>
+                                                                                                         <div class="row">
+                                                         <div class="col-md-6">
+                                                             <strong>Montant Total:</strong><br>
+                                                             <span class="h5 text-success">{{ $order->total_amount ?: '0.00' }} DH</span>
+                                                         </div>
+                                                         <div class="col-md-6">
+                                                             <strong>Statut Paiement:</strong><br>
+                                                             @if($order->payment_status === 'unpaid')
+                                                                 <span class="badge bg-danger">Non payé</span>
+                                                             @elseif($order->payment_status === 'partial')
+                                                                 <span class="badge bg-warning">Partiellement payé</span>
+                                                             @elseif($order->payment_status === 'paid')
+                                                                 <span class="badge bg-success">Payé</span>
+                                                             @else
+                                                                 <span class="badge bg-secondary">{{ $order->payment_status }}</span>
+                                                             @endif
+                                                         </div>
+                                                     </div>
                                                 </div>
                                                 <div class="modal-footer">
                                                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fermer</button>
@@ -174,60 +211,145 @@
                 <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
             </div>
             <div class="modal-body">
-                <form>
-                    <div class="row">
-                        <div class="col-md-6 mb-3">
-                            <label for="reference" class="form-label">Référence</label>
-                            <input type="text" class="form-control" id="reference" placeholder="Ex: PO-001">
-                        </div>
+                <form method="POST" action="{{ route('erp.purchases.purchase_orders.store') }}" id="purchaseOrderForm">
+                    @csrf
+                                         <div class="row">
+                         <div class="col-md-6 mb-3">
+                             <label for="reference" class="form-label">Référence</label>
+                             <input type="text" class="form-control @error('reference') is-invalid @enderror" id="reference" name="reference" placeholder="Ex: PO-001" value="{{ old('reference') }}">
+                             <small class="text-muted">Laissez vide pour générer automatiquement</small>
+                             @error('reference')
+                                 <div class="invalid-feedback">
+                                     {{ $message }}
+                                 </div>
+                             @enderror
+                         </div>
                         <div class="col-md-6 mb-3">
                             <label for="supplier_id" class="form-label">Fournisseur *</label>
-                            <select class="form-select" id="supplier_id" required>
+                            <select class="form-select" id="supplier_id" name="supplier_id" required>
                                 <option value="">Sélectionner un fournisseur...</option>
+                                @foreach($suppliers as $supplier)
+                                    <option value="{{ $supplier->id }}">
+                                        {{ $supplier->company_name }}
+                                        @if($supplier->contact_name)
+                                            - {{ $supplier->contact_name }}
+                                        @endif
+                                    </option>
+                                @endforeach
                             </select>
                         </div>
                     </div>
                     
                     <div class="mb-3">
                         <label for="notes" class="form-label">Notes</label>
-                        <textarea class="form-control" id="notes" rows="3" placeholder="Notes sur la commande..."></textarea>
+                        <textarea class="form-control" id="notes" name="notes" rows="3" placeholder="Notes sur la commande..."></textarea>
                     </div>
                     
                     <div class="mb-3">
-                        <label class="form-label">Articles de la Commande</label>
-                        <div class="border rounded p-3">
-                            <div class="row mb-2">
+                        <label class="form-label">Articles de la Commande *</label>
+                        <div class="border rounded p-3" id="orderItems">
+                            <div class="order-item row mb-2">
                                 <div class="col-md-4">
-                                    <input type="text" class="form-control" placeholder="Produit" required>
+                                    <input type="text" class="form-control" name="items[0][product_name]" placeholder="Nom du produit" required>
                                 </div>
                                 <div class="col-md-2">
-                                    <input type="number" class="form-control" placeholder="Quantité" min="1" required>
+                                    <input type="number" class="form-control quantity" name="items[0][quantity]" placeholder="Quantité" min="1" required>
                                 </div>
                                 <div class="col-md-3">
-                                    <input type="number" class="form-control" placeholder="Prix unitaire" step="0.01" min="0">
+                                    <input type="number" class="form-control unit-price" name="items[0][unit_price]" placeholder="Prix unitaire (DH)" step="0.01" min="0" required>
                                 </div>
                                 <div class="col-md-2">
-                                    <input type="number" class="form-control" placeholder="Total" step="0.01" readonly>
+                                    <input type="number" class="form-control total-price" placeholder="Total (DH)" step="0.01" readonly>
                                 </div>
                                 <div class="col-md-1">
-                                    <button type="button" class="btn btn-outline-danger btn-sm">
+                                    <button type="button" class="btn btn-outline-danger btn-sm remove-item">
                                         <i class="fas fa-trash"></i>
                                     </button>
                                 </div>
                             </div>
-                            <button type="button" class="btn btn-outline-primary btn-sm">
+                            <button type="button" class="btn btn-outline-primary btn-sm" id="addItem">
                                 <i class="fas fa-plus me-1"></i>
                                 Ajouter un Article
                             </button>
                         </div>
                     </div>
-                </form>
+                
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Annuler</button>
-                <button type="button" class="btn btn-primary">Créer la Commande</button>
+                <button type="submit" class="btn btn-primary">Créer la Commande</button>
+                </form>
             </div>
         </div>
     </div>
 </div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    let itemIndex = 1;
+
+    // Ajouter un nouvel article
+    document.getElementById('addItem').addEventListener('click', function() {
+        const orderItems = document.getElementById('orderItems');
+        const newItem = document.createElement('div');
+        newItem.className = 'order-item row mb-2';
+        newItem.innerHTML = `
+            <div class="col-md-4">
+                <input type="text" class="form-control" name="items[${itemIndex}][product_name]" placeholder="Nom du produit" required>
+            </div>
+            <div class="col-md-2">
+                <input type="number" class="form-control quantity" name="items[${itemIndex}][quantity]" placeholder="Quantité" min="1" required>
+            </div>
+            <div class="col-md-3">
+                <input type="number" class="form-control unit-price" name="items[${itemIndex}][unit_price]" placeholder="Prix unitaire (DH)" step="0.01" min="0" required>
+            </div>
+            <div class="col-md-2">
+                <input type="number" class="form-control total-price" placeholder="Total (DH)" step="0.01" readonly>
+            </div>
+            <div class="col-md-1">
+                <button type="button" class="btn btn-outline-danger btn-sm remove-item">
+                    <i class="fas fa-trash"></i>
+                </button>
+            </div>
+        `;
+        
+        // Insérer avant le bouton "Ajouter"
+        orderItems.insertBefore(newItem, this);
+        itemIndex++;
+        
+        // Ajouter les event listeners pour le nouvel article
+        addItemEventListeners(newItem);
+    });
+
+    // Supprimer un article
+    document.addEventListener('click', function(e) {
+        if (e.target.classList.contains('remove-item') || e.target.closest('.remove-item')) {
+            const item = e.target.closest('.order-item');
+            if (document.querySelectorAll('.order-item').length > 1) {
+                item.remove();
+            }
+        }
+    });
+
+    // Calculer le total pour chaque article
+    function calculateItemTotal(item) {
+        const quantity = parseFloat(item.querySelector('.quantity').value) || 0;
+        const unitPrice = parseFloat(item.querySelector('.unit-price').value) || 0;
+        const totalPrice = quantity * unitPrice;
+        item.querySelector('.total-price').value = totalPrice.toFixed(2);
+    }
+
+    // Ajouter les event listeners pour un article
+    function addItemEventListeners(item) {
+        const quantityInput = item.querySelector('.quantity');
+        const unitPriceInput = item.querySelector('.unit-price');
+        
+        quantityInput.addEventListener('input', () => calculateItemTotal(item));
+        unitPriceInput.addEventListener('input', () => calculateItemTotal(item));
+    }
+
+    // Ajouter les event listeners pour les articles existants
+    document.querySelectorAll('.order-item').forEach(addItemEventListeners);
+});
+</script>
 @endsection 

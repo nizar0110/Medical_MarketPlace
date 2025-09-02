@@ -113,6 +113,12 @@ class ProductController extends Controller
     public function edit($id)
     {
         $product = Product::findOrFail($id);
+        
+        // Vérifier l'autorisation : seul le propriétaire ou un admin peut modifier
+        if (auth()->user()->role !== 'admin' && $product->seller_id !== auth()->id()) {
+            return redirect()->route('products.index')->with('error', 'Vous n\'êtes pas autorisé à modifier ce produit.');
+        }
+        
         $categories = Category::all();
         return view('products.edit', compact('product', 'categories'));
     }
@@ -123,6 +129,12 @@ class ProductController extends Controller
     public function update(Request $request, string $id)
     {
         $product = Product::findOrFail($id);
+        
+        // Vérifier l'autorisation : seul le propriétaire ou un admin peut modifier
+        if (auth()->user()->role !== 'admin' && $product->seller_id !== auth()->id()) {
+            return redirect()->route('products.index')->with('error', 'Vous n\'êtes pas autorisé à modifier ce produit.');
+        }
+        
         $validated = $request->validate([
             'name' => 'required|string|max:255',
             'description' => 'required|string',
@@ -148,6 +160,12 @@ class ProductController extends Controller
     public function destroy(Request $request, $id)
     {
         $product = Product::findOrFail($id);
+        
+        // Vérifier l'autorisation : seul le propriétaire ou un admin peut supprimer
+        if (auth()->user()->role !== 'admin' && $product->seller_id !== auth()->id()) {
+            return redirect()->route('products.index')->with('error', 'Vous n\'êtes pas autorisé à supprimer ce produit.');
+        }
+        
         $categoryId = $product->category_id;
         $product->delete();
         

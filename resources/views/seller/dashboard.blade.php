@@ -27,7 +27,7 @@
         </div>
     @endif
 
-    <!-- Statistiques -->
+            <!-- Statistiques -->
     <div class="row g-4 mb-4">
         <div class="col-lg-3 col-md-6">
             <div class="card bg-primary text-white">
@@ -84,10 +84,10 @@
                 </div>
             </div>
         </div>
-    </div>
+            </div>
 
     <div class="row g-4">
-        <!-- Produits récents -->
+                <!-- Produits récents -->
         <div class="col-lg-8">
             <div class="card">
                 <div class="card-header d-flex justify-content-between align-items-center">
@@ -99,29 +99,29 @@
                     </a>
                 </div>
                 <div class="card-body">
-                    @forelse($recentProducts ?? [] as $product)
+                            @forelse($recentProducts ?? [] as $product)
                         <div class="d-flex align-items-center justify-content-between p-3 border-bottom">
                             <div class="d-flex align-items-center">
-                                @if($product->image)
+                                        @if($product->image)
                                     @if(Str::startsWith($product->image, 'http'))
                                         <img src="{{ $product->image }}" alt="{{ $product->name }}" class="rounded me-3" style="width: 60px; height: 60px; object-fit: cover;">
                                     @else
                                         <img src="{{ asset('storage/' . $product->image) }}" alt="{{ $product->name }}" class="rounded me-3" style="width: 60px; height: 60px; object-fit: cover;">
                                     @endif
-                                @else
+                                        @else
                                     <div class="bg-light rounded me-3 d-flex align-items-center justify-content-center" style="width: 60px; height: 60px;">
                                         <i class="fas fa-image fa-2x text-muted"></i>
-                                    </div>
-                                @endif
+                                            </div>
+                                        @endif
                                 
-                                <div>
+                                        <div>
                                     <h6 class="fw-bold mb-1">{{ $product->name }}</h6>
                                     <p class="text-muted mb-1">{{ number_format($product->price, 2) }} DH</p>
                                     <span class="badge bg-{{ $product->stock > 10 ? 'success' : ($product->stock > 0 ? 'warning' : 'danger') }}">
                                         Stock: {{ $product->stock }}
                                     </span>
-                                </div>
-                            </div>
+                                        </div>
+                                    </div>
                             
                             <div class="d-flex gap-2">
                                 <a href="{{ route('products.edit', $product) }}" class="btn btn-outline-primary btn-sm" title="Modifier">
@@ -139,23 +139,23 @@
                                         <i class="fas fa-trash"></i>
                                     </button>
                                 </form>
-                            </div>
-                        </div>
-                    @empty
+                                    </div>
+                                </div>
+                            @empty
                         <div class="text-center py-4">
                             <i class="fas fa-box-open fa-3x text-muted mb-3"></i>
                             <h5 class="text-muted">Aucun produit encore</h5>
                             <p class="text-muted">Commencez par ajouter votre premier produit</p>
                             <a href="{{ route('seller.products.create') }}" class="btn btn-primary">
                                 <i class="fas fa-plus me-1"></i>Ajouter un produit
-                            </a>
-                        </div>
-                    @endforelse
-                </div>
+                                    </a>
+                                </div>
+                            @endforelse
+                    </div>
             </div>
         </div>
 
-        <!-- Commandes récentes -->
+                <!-- Commandes récentes -->
         <div class="col-lg-4">
             <div class="card">
                 <div class="card-header d-flex justify-content-between align-items-center">
@@ -165,35 +165,35 @@
                     <a href="#" class="btn btn-outline-primary btn-sm">Voir toutes</a>
                 </div>
                 <div class="card-body">
-                    @forelse($recentOrders ?? [] as $order)
+                            @forelse($recentOrders ?? [] as $order)
                         <div class="d-flex align-items-center justify-content-between p-3 border-bottom">
-                            <div>
+                                    <div>
                                 <h6 class="fw-bold mb-1">Commande #{{ $order->id }}</h6>
                                 <p class="text-muted mb-1">{{ $order->created_at->format('d/m/Y H:i') }}</p>
                                 <p class="fw-bold text-primary">{{ number_format($order->total, 2) }} DH</p>
-                            </div>
+                                    </div>
                             <span class="badge bg-{{ 
                                 $order->status === 'pending' ? 'warning' : 
                                 ($order->status === 'processing' ? 'info' : 
                                 ($order->status === 'shipped' || $order->status === 'delivered' ? 'success' : 
                                 ($order->status === 'cancelled' ? 'danger' : 'secondary'))) 
                             }}">
-                                {{ ucfirst($order->status) }}
-                            </span>
-                        </div>
-                    @empty
+                                        {{ ucfirst($order->status) }}
+                                    </span>
+                                </div>
+                            @empty
                         <div class="text-center py-4">
                             <i class="fas fa-shopping-cart fa-3x text-muted mb-3"></i>
                             <h6 class="text-muted">Aucune commande</h6>
                             <p class="text-muted small">Les commandes apparaîtront ici</p>
-                        </div>
-                    @endforelse
-                </div>
+                                </div>
+                            @endforelse
+                    </div>
             </div>
         </div>
-    </div>
+            </div>
 
-    <!-- Actions rapides -->
+            <!-- Actions rapides -->
     <div class="row mt-4">
         <div class="col-12">
             <div class="card">
@@ -201,30 +201,30 @@
                     <h5 class="card-title mb-0 fw-bold">
                         <i class="fas fa-bolt me-2"></i>Actions rapides
                     </h5>
-                </div>
+                            </div>
                 <div class="card-body">
                     <div class="row g-3">
                         <div class="col-md-3">
                             <a href="{{ route('seller.products.create') }}" class="btn btn-primary w-100">
                                 <i class="fas fa-plus me-2"></i>Nouveau produit
                             </a>
-                        </div>
+                            </div>
                         <div class="col-md-3">
                             <a href="{{ route('products.index') }}" class="btn btn-outline-primary w-100">
                                 <i class="fas fa-list me-2"></i>Voir mes produits
                             </a>
-                        </div>
+                            </div>
                         <div class="col-md-3">
                             <a href="#" class="btn btn-outline-success w-100">
                                 <i class="fas fa-chart-bar me-2"></i>Statistiques
                             </a>
-                        </div>
+                            </div>
                         <div class="col-md-3">
                             <a href="#" class="btn btn-outline-info w-100">
                                 <i class="fas fa-cog me-2"></i>Paramètres
                             </a>
-                        </div>
-                    </div>
+                            </div>
+                            </div>
                 </div>
             </div>
         </div>

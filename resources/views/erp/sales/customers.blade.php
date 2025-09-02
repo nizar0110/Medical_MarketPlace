@@ -51,7 +51,7 @@
                                     @foreach($customers as $customer)
                                     <tr>
                                         <td>
-                                            <div class="fw-bold">{{ $customer->name }}</div>
+                                            <div class="fw-bold">{{ $customer->contact_name }}</div>
                                             @if($customer->company_name)
                                                 <small class="text-muted">{{ $customer->company_name }}</small>
                                             @endif
@@ -67,7 +67,7 @@
                                         <td>{{ $customer->city ?: '-' }}</td>
                                         <td>{{ $customer->country ?: '-' }}</td>
                                         <td>
-                                            @if($customer->is_active)
+                                            @if($customer->status === 'active')
                                                 <span class="badge bg-success">Actif</span>
                                             @else
                                                 <span class="badge bg-secondary">Inactif</span>
@@ -94,7 +94,7 @@
                                                     <div class="row">
                                                         <div class="col-md-6">
                                                             <strong>Nom:</strong><br>
-                                                            {{ $customer->name }}
+                                                            {{ $customer->contact_name }}
                                                         </div>
                                                         <div class="col-md-6">
                                                             <strong>Société:</strong><br>

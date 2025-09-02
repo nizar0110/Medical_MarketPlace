@@ -36,28 +36,28 @@
                         <div class="d-flex align-items-center gap-3">
                             <label for="period-selector" class="form-label mb-0 fw-bold">Période :</label>
                             <select id="period-selector" class="form-select" style="width: auto;">
-                                <option value="day">Aujourd'hui</option>
-                                <option value="week">Cette semaine</option>
-                                <option value="month" selected>Ce mois</option>
-                                <option value="year">Cette année</option>
-                            </select>
+                    <option value="day">Aujourd'hui</option>
+                    <option value="week">Cette semaine</option>
+                    <option value="month" selected>Ce mois</option>
+                    <option value="year">Cette année</option>
+                </select>
                         </div>
 
                         <div class="d-flex gap-2">
                             <button onclick="window.location.href='{{ route('admin.dashboard') }}'" class="btn btn-primary">
                                 <i class="fas fa-sync-alt me-1"></i> Actualiser
-                            </button>
+                    </button>
                             <button onclick="exportData()" class="btn btn-success">
                                 <i class="fas fa-download me-1"></i> Exporter
-                            </button>
+                    </button>
                         </div>
                     </div>
                 </div>
             </div>
-        </div>
-    </div>
+                </div>
+            </div>
 
-    <!-- Statistiques générales -->
+            <!-- Statistiques générales -->
     <div class="row g-4 mb-4">
         <div class="col-lg-3 col-md-6">
             <div class="card bg-primary text-white">
@@ -76,8 +76,8 @@
                         </a>
                     </div>
                 </div>
-            </div>
-        </div>
+                            </div>
+                        </div>
         
         <div class="col-lg-3 col-md-6">
             <div class="card bg-success text-white">
@@ -96,8 +96,8 @@
                         </a>
                     </div>
                 </div>
-            </div>
-        </div>
+                            </div>
+                        </div>
         
         <div class="col-lg-3 col-md-6">
             <div class="card bg-warning text-white">
@@ -116,8 +116,8 @@
                         </a>
                     </div>
                 </div>
-            </div>
-        </div>
+                            </div>
+                        </div>
         
         <div class="col-lg-3 col-md-6">
             <div class="card bg-info text-white">
@@ -135,12 +135,12 @@
                             Voir les détails <i class="fas fa-arrow-right ms-1"></i>
                         </a>
                     </div>
+                        </div>
+                    </div>
                 </div>
             </div>
-        </div>
-    </div>
 
-    <!-- Actions rapides -->
+            <!-- Actions rapides -->
     <div class="row g-4 mb-4">
         <div class="col-md-4">
             <div class="card border-primary h-100">
@@ -153,9 +153,9 @@
                     <a href="{{ route('products.create') }}" class="btn btn-primary">
                         <i class="fas fa-plus me-1"></i>Ajouter
                     </a>
-                </div>
-            </div>
-        </div>
+                                </div>
+                                </div>
+                            </div>
 
         <div class="col-md-4">
             <div class="card border-success h-100">
@@ -184,9 +184,9 @@
                         <i class="fas fa-chart-bar me-1"></i>Statistiques
                     </a>
                 </div>
-            </div>
-        </div>
-    </div>
+                                </div>
+                                </div>
+                            </div>
 
     <div class="row g-4">
         <!-- Utilisateurs récents -->
@@ -230,20 +230,20 @@
                                         <li><a class="dropdown-item text-danger" href="#"><i class="fas fa-trash me-2"></i>Supprimer</a></li>
                                     </ul>
                                 </div>
-                            </div>
-                        </div>
-                    @empty
+                                    </div>
+                                </div>
+                            @empty
                         <div class="text-center py-4">
                             <i class="fas fa-users fa-3x text-muted mb-3"></i>
                             <h6 class="text-muted">Aucun utilisateur</h6>
                             <p class="text-muted small">Commencez par créer un nouvel utilisateur.</p>
+                                </div>
+                            @endforelse
                         </div>
-                    @endforelse
+                    </div>
                 </div>
-            </div>
-        </div>
 
-        <!-- Commandes récentes -->
+                <!-- Commandes récentes -->
         <div class="col-lg-6">
             <div class="card">
                 <div class="card-header d-flex justify-content-between align-items-center">
@@ -251,24 +251,24 @@
                         <i class="fas fa-shopping-cart me-2 text-warning"></i>Commandes récentes
                     </h5>
                     <a href="#" class="btn btn-outline-warning btn-sm">Voir tout</a>
-                </div>
+                        </div>
                 <div class="card-body">
-                    @forelse($recentOrders ?? [] as $order)
+                            @forelse($recentOrders ?? [] as $order)
                         <div class="d-flex align-items-center justify-content-between p-3 border-bottom">
-                            <div>
+                                    <div>
                                 <h6 class="fw-bold mb-1">Commande #{{ $order->id }}</h6>
                                 <p class="text-muted mb-1 small">{{ $order->user->name ?? 'Utilisateur supprimé' }}</p>
                                 <small class="text-muted">{{ $order->created_at->format('d/m/Y H:i') }}</small>
                                 <p class="fw-bold text-primary mb-0">{{ number_format($order->total, 2) }} DH</p>
-                            </div>
+                                    </div>
                             <div class="d-flex align-items-center gap-2">
                                 <span class="badge bg-{{ 
                                     $order->status === 'pending' ? 'warning' : 
                                     ($order->status === 'processing' ? 'info' : 
                                     ($order->status === 'shipped' ? 'success' : 'secondary')) 
                                 }}">
-                                    {{ ucfirst($order->status) }}
-                                </span>
+                                        {{ ucfirst($order->status) }}
+                                    </span>
                                 
                                 <div class="dropdown">
                                     <button class="btn btn-outline-secondary btn-sm dropdown-toggle" type="button" data-bs-toggle="dropdown">
@@ -282,18 +282,18 @@
                                     </ul>
                                 </div>
                             </div>
-                        </div>
-                    @empty
+                                </div>
+                            @empty
                         <div class="text-center py-4">
                             <i class="fas fa-shopping-cart fa-3x text-muted mb-3"></i>
                             <h6 class="text-muted">Aucune commande</h6>
                             <p class="text-muted small">Les commandes apparaîtront ici.</p>
+                                </div>
+                            @endforelse
                         </div>
-                    @endforelse
+                    </div>
                 </div>
             </div>
-        </div>
-    </div>
 
     <!-- Statistiques du mois -->
     <div class="row mt-4">
@@ -324,19 +324,19 @@
                                 <div class="text-muted">Nouveaux utilisateurs</div>
                             </div>
                         </div>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
     </div>
-</div>
 
-<script>
-    function exportData() {
-        // Implement export functionality
-        alert('Fonctionnalité d\'export en cours de développement');
-    }
-</script>
+    <script>
+        function exportData() {
+            // Implement export functionality
+            alert('Fonctionnalité d\'export en cours de développement');
+        }
+    </script>
 
 <style>
 .card {

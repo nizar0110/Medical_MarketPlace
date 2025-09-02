@@ -155,7 +155,7 @@
                             <div class="list-group-item border-0 px-0">
                                 <div class="d-flex justify-content-between align-items-center">
                                     <div>
-                                        <h6 class="mb-1">{{ $customer->name }}</h6>
+                                        <h6 class="mb-1">{{ $customer->contact_name }}</h6>
                                         <small class="text-muted">{{ $customer->email ?: '' }}</small>
                                     </div>
                                     <span class="badge bg-success">Actif</span>
